@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Outfit", sans-serif;
+  
+  --color-brand: #4f46e5;
+  --color-brand-light: #818cf8;
+  --color-brand-dark: #3730a3;
+  
+  --color-surface-base: #09090b;
+  --color-surface-raised: #18181b;
+  --color-surface-panel: #121214;
+  --color-border-subtle: #27272a;
+  
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
+  --radius-3xl: 1.5rem;
+}
+
+@layer base {
+  body {
+    @apply bg-surface-base text-zinc-100 font-sans antialiased;
+  }
+}
+
+.glass-panel {
+  @apply bg-surface-raised border border-border-subtle shadow-lg;
+}
+
+.sidebar-gradient {
+  @apply bg-surface-panel border-r border-border-subtle;
+}
+
+.chart-gradient-purple {
+  fill: url(#brandGradient);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-zinc-800 rounded-full hover:bg-zinc-700 transition-colors;
+}
+
+::selection {
+  @apply bg-brand/30 text-white;
+}
+
+@layer utilities {
+  .text-glow {
+    text-shadow: 0 0 15px rgba(79, 70, 229, 0.4);
+  }
+  .border-glow {
+    box-shadow: 0 0 20px rgba(79, 70, 229, 0.1) inset;
+  }
+}
+

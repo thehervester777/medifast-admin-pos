@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   LayoutDashboard, 
@@ -20,6 +20,8 @@ import {
   Settings, 
   Search, 
   Bell, 
+  Box, 
+  Tags,
   Plus, 
   ChevronRight,
   LogOut,
@@ -42,6 +44,8 @@ import ClientManagementView from './components/ClientManagementView.tsx';
 import SettingsView from './components/SettingsView.tsx';
 import B2BModuleView from './components/B2BModuleView.tsx';
 import ReferralView from './components/ReferralView.tsx';
+import SummaryView from './components/SummaryView.tsx';
+import AdminManagementView from './components/AdminManagementView.tsx';
 
 import CommandPalette from './components/CommandPalette.tsx';
 
@@ -59,11 +63,8 @@ export default function App() {
     const handleResize = () => {
       const width = window.innerWidth;
       setWindowWidth(width);
-      if (width <= 1024) {
-        setIsSidebarOpen(false);
-      } else {
-        setIsSidebarOpen(true);
-      }
+      if (width <= 1024) setIsSidebarOpen(false);
+      else setIsSidebarOpen(true);
     };
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
@@ -80,15 +81,38 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
+
+  const toggleExpand = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setExpandedItems(prev => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
+  };
+
   const navItems = [
-    { id: 'dashboard' as Page, label: 'Overview Dashboard', icon: LayoutDashboard },
-    { id: 'inventory' as Page, label: 'Inventory Management', icon: Package },
-    { id: 'orders' as Page, label: 'Order Tracking', icon: ClipboardList },
-    { id: 'clients' as Page, label: 'Client Management', icon: Users },
-    { id: 'b2b' as Page, label: 'B2B Module', icon: Handshake },
-    { id: 'referral' as Page, label: 'Referral & Staff', icon: Award },
-    { id: 'logistics' as Page, label: 'Logistics & Shipments', icon: Truck },
-    { id: 'analytics' as Page, label: 'Analytics & Insights', icon: BarChart3 },
+    { id: 'dashboard' as Page, label: 'Dashboard', icon: LayoutDashboard },
+    { id: 'orders' as Page, label: 'Order Reports', icon: ClipboardList, hasChildren: true },
+    { id: 'inventory' as Page, label: 'Inventory', icon: Package, hasChildren: true, children: [
+      { id: 'summary' as Page, label: 'Summary' },
+      { id: 'inventory' as Page, label: 'Detailed View' }
+    ]},
+    { id: 'clients' as Page, label: 'Users', icon: Users, hasChildren: true, children: [
+      { id: 'admins' as Page, label: 'Admin' },
+      { id: 'clients' as Page, label: 'Users' }
+    ]},
+    { id: 'products' as Page, label: 'Our Products', icon: Box, hasChildren: true },
+    { id: 'discounts' as Page, label: 'Discounts', icon: Tags, hasChildren: true },
+    { id: 'logistics' as Page, label: 'Logistics', icon: Truck, hasChildren: true },
+    { id: 'analytics' as Page, label: 'Analytics', icon: BarChart3, hasChildren: true },
+    { id: 'b2b' as Page, label: 'B2B Module', icon: Handshake, hasChildren: true },
+    { id: 'referral' as Page, label: 'Referral Module', icon: Award, hasChildren: true, children: [
+      { id: 'referral' as Page, label: 'Dashboard' },
+      { id: 'referral_generate' as Page, label: 'Generate Code' },
+      { id: 'referral_manage' as Page, label: 'Manage Codes' },
+      { id: 'referral_customers' as Page, label: 'Customer List' }
+    ]},
   ];
 
   if (!isAuthenticated) {
@@ -96,8 +120,8 @@ export default function App() {
   }
 
   return (
-    <div className="flex h-screen bg-surface-base overflow-hidden font-sans text-zinc-100">
-      {/* Sidebar Overlay for Mobile */}
+    <div className="flex min-h-screen bg-surface-base font-sans selection:bg-brand/30">
+      {/* Mobile Sidebar Overlay */}
       <AnimatePresence>
         {isSidebarOpen && windowWidth <= 1024 && (
           <motion.div 
@@ -110,174 +134,262 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      {/* Sidebar */}
+      {/* Floating Sidebar */}
       <motion.aside 
         initial={false}
         animate={{ 
-          width: isSidebarOpen ? (windowWidth <= 1024 ? 300 : 280) : (windowWidth <= 1024 ? 0 : 80),
+          width: isSidebarOpen ? (windowWidth <= 1024 ? 280 : 260) : (windowWidth <= 1024 ? 0 : 88),
           x: isSidebarOpen || windowWidth > 1024 ? 0 : -300
         }}
-        className={`sidebar-gradient border-r border-border-subtle flex flex-col z-50 fixed lg:relative h-full shrink-0 ${!isSidebarOpen && windowWidth <= 1024 ? 'hidden' : 'flex'}`}
+        className="fixed lg:sticky top-0 h-screen z-50 p-4 shrink-0 pointer-events-none"
       >
-        <div className="p-6 flex items-center justify-between h-20">
-          <div className="flex items-center gap-3 overflow-hidden whitespace-nowrap">
-            <div className="w-10 h-10 bg-brand rounded-xl flex items-center justify-center text-white shadow-lg shadow-brand/20 shrink-0">
-              <Package size={24} />
+        <div className="h-full glass-panel rounded-[2.5rem] flex flex-col pointer-events-auto border-white/[0.03] shadow-2xl relative overflow-hidden">
+          {/* Logo Section */}
+          <div className="px-6 py-8 h-20 flex items-center gap-3 overflow-hidden">
+            <div className="w-10 h-10 bg-brand rounded-2xl flex items-center justify-center text-white shadow-xl shadow-brand/20 shrink-0">
+              <Package size={22} />
             </div>
-            {isSidebarOpen && (
-              <span className="font-display font-bold text-xl text-white tracking-tight">Medifast</span>
-            )}
-          </div>
-        </div>
-
-        <nav className="flex-1 px-3 space-y-1 py-4 overflow-y-auto custom-scrollbar">
-          <div className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest px-4 mb-2 overflow-hidden">
-            {isSidebarOpen ? 'Main Menu' : '•••'}
-          </div>
-          {navItems.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => setCurrentPage(item.id)}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group relative ${
-                currentPage === item.id 
-                ? 'bg-brand text-white shadow-xl shadow-brand/20' 
-                : 'text-zinc-500 hover:bg-zinc-800/50 hover:text-white'
-              }`}
-            >
-              <item.icon size={18} className={`${currentPage === item.id ? 'text-white' : 'group-hover:scale-110 transition-transform'}`} />
+            <AnimatePresence>
               {isSidebarOpen && (
-                <span className="font-bold whitespace-nowrap text-xs tracking-tight">{item.label}</span>
+                <motion.span 
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -10 }}
+                  className="font-display font-bold text-xl text-white tracking-tight whitespace-nowrap"
+                >
+                  Medi<span className="text-brand relative">fast<span className="absolute -top-1 -right-4 text-[7px] bg-brand/20 text-brand px-1 rounded-sm border border-brand/30 leading-none py-0.5 font-sans">PRO</span></span>
+                </motion.span>
               )}
-              {currentPage === item.id && !isSidebarOpen && (
-                <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1.5 h-6 bg-white rounded-l-full" />
-              )}
-            </button>
-          ))}
-
-          <div className="pt-6">
-            <div className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest px-4 mb-2 overflow-hidden">
-              {isSidebarOpen ? 'System' : '•••'}
-            </div>
-            <button
-              onClick={() => setCurrentPage('settings')}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group ${
-                currentPage === 'settings' 
-                ? 'bg-brand text-white shadow-xl shadow-brand/20' 
-                : 'text-zinc-500 hover:bg-zinc-800/50 hover:text-white'
-              }`}
-            >
-              <Settings size={18} className={currentPage === 'settings' ? 'text-white' : 'group-hover:rotate-45 transition-transform'} />
-              {isSidebarOpen && <span className="font-bold text-xs tracking-tight">Settings & Roles</span>}
-            </button>
+            </AnimatePresence>
           </div>
-        </nav>
 
-        {/* User Profile */}
-        <div className="p-3 mt-auto border-t border-border-subtle">
-          <div className={`group flex items-center gap-3 p-2 rounded-xl transition-all duration-300 ${isSidebarOpen ? 'bg-zinc-900 border border-border-subtle hover:bg-zinc-800' : 'hover:bg-zinc-900'} cursor-pointer`}>
-            <div className="relative">
-               <img 
-                 src="https://api.dicebear.com/7.x/avataaars/svg?seed=Stanley&backgroundColor=121214" 
-                 alt="User" 
-                 className="w-8 h-8 rounded-lg bg-zinc-800 shrink-0" 
-               />
-               <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 border-2 border-surface-panel rounded-full" />
-            </div>
-            {isSidebarOpen && (
-              <div className="flex-1 overflow-hidden">
-                <p className="text-xs font-bold text-white truncate leading-none mb-0.5">Stanley Admin</p>
-                <p className="text-[9px] font-bold text-zinc-500 truncate uppercase tracking-widest">Super Admin</p>
+          <nav className="flex-1 px-4 space-y-2 py-4 overflow-y-auto custom-scrollbar">
+            {navItems.map((item) => (
+              <div key={item.id} className="space-y-1">
+                <button
+                  onClick={() => {
+                    setCurrentPage(item.id);
+                    if (windowWidth <= 1024) setIsSidebarOpen(false);
+                    if (item.hasChildren) {
+                      setExpandedItems(prev => ({ ...prev, [item.id]: !prev[item.id] }));
+                    }
+                  }}
+                  className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all relative group overflow-hidden
+                    ${currentPage === item.id 
+                      ? 'text-white' 
+                      : 'text-zinc-500 hover:text-white hover:bg-white/5'
+                    }`}
+                >
+                  {currentPage === item.id && (
+                    <motion.div 
+                      layoutId="active-pill"
+                      className="absolute inset-0 bg-brand/10 border border-brand/20 rounded-2xl -z-10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]"
+                    />
+                  )}
+                  <item.icon size={20} className={`relative z-10 transition-colors ${currentPage === item.id ? 'text-brand' : 'group-hover:text-white'}`} strokeWidth={currentPage === item.id ? 2.5 : 2} />
+                  <AnimatePresence mode="popLayout">
+                    {isSidebarOpen && (
+                      <motion.div 
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -10 }}
+                        className="flex-1 flex items-center justify-between relative z-10 overflow-hidden"
+                      >
+                        <span className={`text-[11px] font-bold uppercase tracking-widest whitespace-nowrap transition-colors ${currentPage === item.id ? 'text-white' : 'text-zinc-600 group-hover:text-zinc-300'}`}>
+                          {item.label}
+                        </span>
+                        {item.hasChildren && (
+                          <ChevronRight 
+                            size={14} 
+                            className={`transition-transform duration-300 ${expandedItems[item.id] ? 'rotate-90' : ''} ${currentPage === item.id ? 'text-brand' : 'text-zinc-800 group-hover:text-zinc-600'}`}
+                          />
+                        )}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </button>
+
+                <AnimatePresence>
+                  {isSidebarOpen && item.hasChildren && expandedItems[item.id] && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="pl-12 pr-4 py-2 space-y-1">
+                        {(item.children || [{ label: 'All Records', id: item.id }, { label: 'Detailed View', id: item.id }]).map((sub: any) => (
+                          <button
+                            key={sub.label}
+                            onClick={() => {
+                              setCurrentPage(sub.id);
+                              if (windowWidth <= 1024) setIsSidebarOpen(false);
+                            }}
+                            className={`w-full text-left py-2 px-3 text-[11px] font-bold uppercase tracking-widest transition-colors flex items-center gap-3 ${currentPage === sub.id ? 'text-white' : 'text-zinc-600 hover:text-white'}`}
+                          >
+                            <div className={`w-1.5 h-1.5 rounded-full border ${currentPage === sub.id ? 'bg-brand border-brand' : 'border-zinc-700'}`} />
+                            {sub.label}
+                          </button>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
+            ))}
+            
+            <div className="py-4">
+              <div className="h-[1px] bg-white/[0.03] mx-4 mb-4" />
+              <button
+                onClick={() => setCurrentPage('settings')}
+                className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all relative group
+                  ${currentPage === 'settings' 
+                    ? 'text-white' 
+                    : 'text-zinc-500 hover:text-white hover:bg-white/5'
+                  }`}
+              >
+                {currentPage === 'settings' && (
+                  <motion.div layoutId="active-nav" className="absolute inset-0 bg-white/5 border border-white/5 rounded-2xl" />
+                )}
+                <Settings size={20} className={`relative z-10 ${currentPage === 'settings' ? 'text-brand' : 'group-hover:text-white'}`} />
+                {isSidebarOpen && <span className="text-sm font-semibold relative z-10 tracking-tight">Settings</span>}
+              </button>
+            </div>
+          </nav>
+
+          {/* User Account & Branding */}
+          <div className="p-4 mt-auto border-t border-white/[0.03] space-y-4">
+            <button className="w-full flex items-center gap-4 p-2.5 rounded-3xl group hover:bg-white/5 transition-colors text-left overflow-hidden">
+              <div className="relative shrink-0">
+                 <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=admin&backgroundColor=121214" alt="User" className="w-10 h-10 rounded-2xl shrink-0" />
+                 <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-surface-raised rounded-full" />
+              </div>
+              <AnimatePresence>
+                {isSidebarOpen && (
+                  <motion.div 
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -10 }}
+                    className="flex-1 min-w-0"
+                  >
+                    <p className="text-xs font-bold text-white truncate text-ellipsis">Rishu Admin</p>
+                    <div className="flex items-center gap-1.5 mt-0.5">
+                       <span className="text-[9px] text-zinc-600 font-bold uppercase tracking-tight truncate text-ellipsis">Superuser</span>
+                       <div className="w-1 h-1 rounded-full bg-brand" />
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </button>
+
+            {isSidebarOpen && (
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="px-4"
+              >
+                <div className="flex items-center gap-3 text-[9px] font-bold text-zinc-700 uppercase tracking-[0.3em]">
+                  <div className="h-[1px] flex-1 bg-white/[0.03]" />
+                  <span className="whitespace-nowrap hover:text-white transition-colors cursor-default">Anon Studios</span>
+                  <div className="h-[1px] flex-1 bg-white/[0.03]" />
+                </div>
+              </motion.div>
             )}
-            {isSidebarOpen && <ChevronRight size={16} className="text-zinc-600 group-hover:text-brand group-hover:translate-x-0.5 transition-all" />}
           </div>
         </div>
       </motion.aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 flex flex-col relative overflow-hidden h-full">
-        {/* Top Header */}
-        <header className="h-20 bg-surface-base border-b border-border-subtle flex items-center justify-between px-4 lg:px-8 z-40 shrink-0">
-          <div className="flex items-center gap-4 lg:gap-6 flex-1 max-w-2xl">
-              <button 
-                 onClick={() => setIsSidebarOpen(!isSidebarOpen)} 
-                 className="p-2.5 hover:bg-zinc-900 rounded-xl text-zinc-500 active:scale-95 transition-all"
-               >
-                {isSidebarOpen && windowWidth <= 1024 ? <X size={20} /> : <Menu size={20} />}
-              </button>
-              <div 
-                 onClick={() => setIsSearchOpen(true)}
-                 className="relative flex-1 group cursor-pointer max-w-[400px]"
-              >
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-brand transition-colors" size={18} />
-                <div className="w-full pl-11 pr-4 py-2.5 bg-zinc-900 border border-transparent group-hover:border-brand/30 rounded-xl text-sm font-medium text-zinc-600 flex items-center justify-between transition-all">
-                  <span className="truncate">Search...</span>
-                  <div className="hidden sm:flex items-center gap-1.5 px-1.5 py-0.5 rounded-md bg-zinc-800 text-[10px] font-bold text-zinc-500">
-                    <span className="text-[12px] leading-none">⌘</span>K
-                  </div>
+      <main className="flex-1 flex flex-col relative min-w-0 transition-all duration-500">
+        {/* Modern Header */}
+        <header className="h-24 px-8 flex items-center justify-between sticky top-0 z-40 bg-surface-base/80 backdrop-blur-xl border-b border-white/[0.03]">
+          <div className="flex items-center gap-6 max-w-2xl flex-1">
+            <button 
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+              className="p-3 rounded-2xl hover:bg-white/5 text-zinc-500 transition-colors"
+            >
+              {isSidebarOpen && windowWidth <= 1024 ? <X size={20} /> : <Menu size={20} />}
+            </button>
+
+            <div 
+              onClick={() => setIsSearchOpen(true)}
+              className="relative flex-1 max-w-md group cursor-pointer"
+            >
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-600 group-hover:text-brand transition-colors" size={16} />
+              <div className="w-full pl-12 pr-4 py-3 bg-white/[0.02] border border-white/[0.05] group-hover:border-white/10 rounded-[1.25rem] text-sm text-zinc-500 flex items-center justify-between transition-all">
+                <span>Enterprise Search...</span>
+                <div className="hidden sm:flex items-center gap-1.5 px-2 py-1 rounded-lg bg-zinc-950 text-[10px] font-bold text-zinc-500 border border-white/5">
+                  <span className="text-[12px] leading-none">⌘</span>K
                 </div>
               </div>
+            </div>
           </div>
 
-          <div className="flex items-center gap-3 lg:gap-6">
-            <div className="hidden md:flex items-center gap-1 p-1 bg-zinc-900 border border-zinc-800 rounded-xl">
-              {['Today', '7D', '30D'].map((t) => (
+          <div className="flex items-center gap-6">
+            <div className="hidden lg:flex items-center gap-1.5 p-1.5 bg-zinc-950/50 border border-white/[0.03] rounded-[1.25rem]">
+              {['Today', '7D', 'Custom'].map((t) => (
                 <button 
-                  key={t} 
+                  key={t}
                   onClick={() => setSelectedRange(t)}
-                  className={`px-4 py-2 text-[10px] font-bold rounded-lg transition-all uppercase tracking-wider ${selectedRange === t ? 'bg-zinc-800 text-white shadow-lg' : 'text-zinc-500 hover:text-zinc-300'}`}
+                  className={`px-5 py-2 text-[10px] font-bold rounded-xl transition-all uppercase tracking-widest
+                    ${selectedRange === t 
+                      ? 'bg-white text-black shadow-lg shadow-white/10' 
+                      : 'text-zinc-500 hover:text-white'
+                    }`}
                 >
+                  {t === 'Custom' ? <Calendar size={14} className="inline mr-2 -mt-0.5" /> : null}
                   {t}
                 </button>
               ))}
-              <div className="w-[1px] h-4 bg-zinc-800 mx-1" />
-              <button 
-                onClick={() => setSelectedRange('Custom')}
-                className={`px-4 py-2 flex items-center gap-2 text-[10px] font-bold rounded-lg transition-all uppercase tracking-wider ${selectedRange === 'Custom' ? 'bg-zinc-800 text-brand shadow-lg' : 'text-zinc-500 hover:text-zinc-300'}`}
-              >
-                <Calendar size={12} />
-                {selectedRange === 'Custom' ? 'May 20 - May 25' : 'Custom'}
+            </div>
+            
+            <div className="h-8 w-[1px] bg-white/[0.05]" />
+            
+            <div className="flex items-center gap-3">
+              <button className="relative p-3 bg-white/[0.02] hover:bg-white/[0.05] rounded-[1.25rem] border border-white/[0.05] transition-all group">
+                <Bell size={20} className="text-zinc-400 group-hover:text-white" />
+                <span className="absolute top-3.5 right-3.5 w-2 h-2 bg-brand rounded-full ring-4 ring-surface-base" />
+              </button>
+              
+              <button className="btn-primary group">
+                <Plus size={18} className="inline mr-2 -mt-0.5" />
+                Capture POD
               </button>
             </div>
-            
-            <div className="hidden sm:block h-8 w-[1px] bg-border-subtle" />
-            
-            <div className="flex items-center gap-2">
-               <button className="relative p-2.5 text-zinc-500 hover:bg-zinc-900 rounded-xl transition-all active:scale-90">
-                 <Bell size={20} />
-                 <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-rose-500 rounded-full border-2 border-surface-base" />
-               </button>
-            </div>
-            
-            <button className="flex items-center justify-center bg-white text-black p-3 lg:px-6 lg:py-3 rounded-xl text-sm font-bold hover:bg-zinc-200 active:scale-[0.97] transition-all">
-              <Plus size={18} />
-              <span className="hidden lg:inline ml-2">Capture POD</span>
-            </button>
           </div>
         </header>
 
-        {/* Dynamic Page Content */}
-        <div className="flex-1 overflow-y-auto p-4 lg:p-10 bg-surface-base custom-scrollbar">
-           <AnimatePresence mode="wait">
-              <motion.div
-                key={currentPage}
-                initial={{ opacity: 0, y: 15, scale: 0.99 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -15, scale: 1.01 }}
-                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                className="max-w-[1600px] mx-auto"
-              >
-                {currentPage === 'dashboard' && <DashboardView />}
-                {currentPage === 'inventory' && <InventoryView />}
-                {currentPage === 'orders' && <OrderTrackingView />}
-                {currentPage === 'analytics' && <AnalyticsView />}
-                {currentPage === 'logistics' && <LogisticsView />}
-                {currentPage === 'clients' && <ClientManagementView />}
-                {currentPage === 'b2b' && <B2BModuleView />}
-                {currentPage === 'referral' && <ReferralView />}
-                {currentPage === 'settings' && <SettingsView />}
-              </motion.div>
-           </AnimatePresence>
+        {/* Dynamic Content Port */}
+        <div className="flex-1 overflow-y-auto custom-scrollbar px-8 py-8">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentPage}
+              initial={{ opacity: 0, y: 20, scale: 0.99 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -20, scale: 1.01 }}
+              transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
+              className="max-w-7xl mx-auto pb-12"
+            >
+              {currentPage === 'dashboard' && <DashboardView />}
+              {currentPage === 'inventory' && <InventoryView />}
+              {currentPage === 'orders' && <OrderTrackingView />}
+              {currentPage === 'summary' && <SummaryView />}
+              {currentPage === 'analytics' && <AnalyticsView />}
+              {currentPage === 'logistics' && <LogisticsView />}
+              {currentPage === 'clients' && <ClientManagementView />}
+              {currentPage === 'admins' && <AdminManagementView />}
+              {currentPage === 'b2b' && <B2BModuleView />}
+              {currentPage === 'referral' && <ReferralView />}
+              {currentPage === 'settings' && <SettingsView />}
+              {['products', 'discounts'].includes(currentPage) && (
+                <div className="modern-card p-12 text-center">
+                  <Package size={48} className="mx-auto text-zinc-800 mb-6" />
+                  <h2 className="text-2xl font-display font-bold text-white mb-2">Module Under Construction</h2>
+                  <p className="text-zinc-500 font-medium">The {currentPage} management interface is currently being optimized.</p>
+                </div>
+              )}
+            </motion.div>
+          </AnimatePresence>
         </div>
 
         <CommandPalette 

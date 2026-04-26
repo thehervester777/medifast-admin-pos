@@ -29,51 +29,68 @@ export default function B2BModuleView() {
   return (
     <div className="space-y-6 pb-10">
       {/* Header Section */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
-        <div>
-          <p className="text-zinc-500 font-bold text-[10px] uppercase tracking-[0.2em] mb-1">Module / Quotations</p>
-          <h1 className="text-2xl font-display font-bold text-white tracking-tight">WELCOME !! RISHU SADMIN</h1>
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-8 mb-4 px-2">
+        <div className="space-y-1">
+          <h1 className="text-3xl font-display font-bold text-white tracking-tight flex items-center gap-3 uppercase">
+            B2B <span className="text-brand">Orchestrator</span>
+            <span className="px-2 py-0.5 rounded bg-brand/10 text-brand text-[9px] font-bold uppercase tracking-widest border border-brand/20">Active Hub</span>
+          </h1>
+          <p className="text-zinc-600 font-bold uppercase tracking-widest text-[10px] mt-2">MediFast B2B Lifecycle • Admin Control Surface</p>
         </div>
-        <div className="flex gap-3">
-           <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white text-black font-bold text-[10px] uppercase tracking-widest hover:bg-zinc-200 transition-all shadow-lg shadow-white/5">
-              <Plus size={16} />
-              <span>New Request</span>
+        <div className="flex gap-4">
+           <button className="px-8 py-3 rounded-2xl bg-white text-black font-bold text-[10px] uppercase tracking-widest hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-2 shadow-[0_20px_40px_rgba(255,255,255,0.1)]">
+              <Plus size={14} />
+              <span>New Request Node</span>
            </button>
         </div>
       </div>
 
       {/* Main Banner */}
-      <div className="bg-gradient-to-r from-brand/80 to-indigo-900/80 p-8 rounded-[1.5rem] relative overflow-hidden border border-brand/20 shadow-2xl">
-         <div className="absolute right-0 top-0 w-64 h-64 bg-white/5 rounded-full -mr-32 -mt-32 blur-3xl" />
-         <div className="relative z-10">
-            <div className="flex items-center gap-4 mb-2">
-               <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center text-white">
-                  <Handshake size={20} />
-               </div>
-               <h2 className="text-xl font-display font-bold text-white tracking-tight">B2B Quotation Dashboard</h2>
-            </div>
-            <p className="text-white/60 text-xs font-medium">Manage medicine requests, providers, and quotations in real-time.</p>
-         </div>
+      <div className="modern-card p-1 border-none bg-brand shadow-[0_30px_60px_rgba(99,102,241,0.25)]">
+        <div className="bg-zinc-950/20 backdrop-blur-3xl p-10 rounded-[inherit] relative overflow-hidden group">
+           <div className="absolute right-0 top-0 w-96 h-96 bg-white/[0.03] rounded-full -mr-48 -mt-48 blur-3xl group-hover:scale-125 transition-transform duration-1000" />
+           <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-8">
+              <div className="space-y-4">
+                <div className="flex items-center gap-4">
+                   <div className="w-14 h-14 bg-white/10 border border-white/10 rounded-2xl flex items-center justify-center text-white shadow-2xl">
+                      <Handshake size={28} />
+                   </div>
+                   <div>
+                      <h2 className="text-3xl font-display font-bold text-white tracking-tight leading-none uppercase">B2B Quotation Control</h2>
+                      <p className="text-white/40 text-[10px] font-bold uppercase tracking-[0.3em] mt-3 leading-none">Real-time procurement & provider mapping</p>
+                   </div>
+                </div>
+              </div>
+              <div className="flex items-center gap-10">
+                <div className="text-right">
+                  <p className="text-white/20 text-[9px] font-bold uppercase tracking-widest mb-1">Authenticated Node</p>
+                  <p className="text-white text-sm font-bold tracking-tight">Rishu SAdmin <span className="text-white/40 ml-2">ID: #00X12</span></p>
+                </div>
+              </div>
+           </div>
+        </div>
       </div>
 
       {/* Primary Stat Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-white font-bold">
         {[
-          { label: 'Total Providers', val: '5', icon: Users, color: 'bg-indigo-500', trend: 'View All' },
-          { label: 'Pending Approvals', val: '1', icon: Clock, color: 'bg-rose-500', trend: 'Review' },
-          { label: 'Active Requests', val: '1', icon: Zap, color: 'bg-emerald-500', trend: 'View All' },
-          { label: 'Total Quotations', val: '2', icon: FileCheck, color: 'bg-sky-500', trend: 'View All' },
+          { label: 'Network Providers', val: '5', icon: Users, color: 'bg-brand/10', text: 'text-brand', border: 'border-brand/20', shadow: 'shadow-brand/5' },
+          { label: 'Pending Validations', val: '1', icon: Clock, color: 'bg-rose-500/10', text: 'text-rose-500', border: 'border-rose-500/20', shadow: 'shadow-rose-500/5' },
+          { label: 'Active Quotations', val: '1', icon: Zap, color: 'bg-emerald-500/10', text: 'text-emerald-500', border: 'border-emerald-500/20', shadow: 'shadow-emerald-500/5' },
+          { label: 'Lifecycle Packets', val: '2', icon: FileCheck, color: 'bg-indigo-500/10', text: 'text-indigo-500', border: 'border-indigo-500/20', shadow: 'shadow-indigo-500/5' },
         ].map((s, i) => (
-          <div key={i} className={`${s.color} p-6 rounded-3xl text-white relative overflow-hidden group shadow-xl transition-all hover:scale-[1.02]`}>
-             <div className="absolute -right-4 -bottom-4 opacity-10 transition-transform group-hover:scale-125 duration-700">
-                <s.icon size={100} />
-             </div>
-             <div className="relative z-10 flex flex-col h-full">
-                <span className="text-2xl font-display font-bold mb-1">{s.val}</span>
-                <p className="text-[10px] font-bold uppercase tracking-widest opacity-80 mb-6">{s.label}</p>
-                <button className="flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-widest bg-white/10 w-fit px-3 py-1.5 rounded-lg hover:bg-white/20 transition-all">
-                   {s.trend} <ArrowRight size={10} />
-                </button>
+          <div key={i} className={`modern-card p-6 bg-zinc-950/20 border border-white/[0.03] group hover:border-white/10 transition-all shadow-2xl relative overflow-hidden`}>
+             <div className="flex flex-col gap-6 relative z-10">
+                <div className="flex items-center justify-between">
+                  <div className={`w-12 h-12 rounded-2xl ${s.color} ${s.text} flex items-center justify-center border ${s.border} shadow-2xl`}>
+                    <s.icon size={22} />
+                  </div>
+                  <button className="text-[9px] font-bold uppercase tracking-widest text-zinc-600 hover:text-white transition-colors">Access Map</button>
+                </div>
+                <div>
+                  <div className="text-3xl font-display font-bold text-white tracking-tight">{s.val}</div>
+                  <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-zinc-700 mt-2">{s.label}</p>
+                </div>
              </div>
           </div>
         ))}
@@ -82,17 +99,17 @@ export default function B2BModuleView() {
       {/* Secondary Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
          {[
-           { label: 'Completed Requests', val: '0', icon: CheckCircle2, color: 'text-brand' },
-           { label: 'This Month Requests', val: '2', icon: Calendar, color: 'text-emerald-500' },
-           { label: 'Accepted Quotations', val: '0', icon: Trophy, color: 'text-amber-500' },
+           { label: 'Completed Payloads', val: '0', icon: CheckCircle2, color: 'text-brand', bg: 'bg-brand/5', border: 'border-brand/10' },
+           { label: 'Temporal Requests', val: '2', icon: Calendar, color: 'text-success', bg: 'bg-success/5', border: 'border-success/10' },
+           { label: 'Accepted Protocols', val: '0', icon: Trophy, color: 'text-warning', bg: 'bg-warning/5', border: 'border-warning/10' },
          ].map((s, i) => (
-           <div key={i} className="glass-panel p-5 rounded-2xl flex items-center gap-4">
-              <div className={`w-10 h-10 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center ${s.color}`}>
-                 <s.icon size={20} />
+           <div key={i} className="modern-card p-5 border-white/[0.03] flex items-center gap-6 group hover:border-white/10 transition-all bg-white/[0.01]">
+              <div className={`w-14 h-14 rounded-2xl bg-zinc-950 border border-white/5 flex items-center justify-center ${s.color} shadow-2xl group-hover:scale-110 transition-transform`}>
+                 <s.icon size={24} />
               </div>
               <div>
-                 <p className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest leading-none mb-1.5">{s.label}</p>
-                 <span className="text-xl font-display font-bold text-white">{s.val}</span>
+                 <p className="text-[9px] text-zinc-700 font-bold uppercase tracking-[0.3em] leading-none mb-3">{s.label}</p>
+                 <span className="text-2xl font-display font-bold text-white leading-none">{s.val}</span>
               </div>
            </div>
          ))}
@@ -101,64 +118,73 @@ export default function B2BModuleView() {
       {/* Content Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Medicine Requests Table */}
-        <div className="lg:col-span-2 flex flex-col gap-4">
-           <div className="glass-panel rounded-3xl overflow-hidden flex flex-col shadow-2xl">
-              <div className="p-6 border-b border-border-subtle flex items-center justify-between">
-                 <div className="flex items-center gap-3">
-                    <Package size={18} className="text-brand" />
-                    <h2 className="text-sm font-bold text-white uppercase tracking-widest">Recent Medicine Requests</h2>
+        <div className="lg:col-span-2 flex flex-col gap-6">
+           <div className="modern-card p-0 overflow-hidden flex flex-col border-white/[0.03] shadow-2xl bg-white/[0.01]">
+              <div className="p-8 border-b border-white/[0.03] flex items-center justify-between bg-white/[0.01]">
+                 <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 bg-brand/10 rounded-xl flex items-center justify-center text-brand border border-brand/20">
+                      <Package size={18} />
+                    </div>
+                    <div>
+                      <h2 className="text-sm font-bold text-white uppercase tracking-[0.2em] leading-none">Medicine Request Matrix</h2>
+                      <p className="text-[9px] text-zinc-700 font-bold uppercase tracking-widest mt-2">Active procurement threads in pipeline</p>
+                    </div>
                  </div>
-                 <button className="text-[10px] font-bold text-brand uppercase tracking-widest hover:underline">View All</button>
+                 <button className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest hover:text-white transition-colors">View Archive</button>
               </div>
               <div className="overflow-x-auto">
                  <table className="w-full">
                     <thead>
-                       <tr className="bg-zinc-900/50">
-                          <th className="px-6 py-4 text-left text-[9px] font-bold text-zinc-500 uppercase tracking-widest">Medicine</th>
-                          <th className="px-6 py-4 text-left text-[9px] font-bold text-zinc-500 uppercase tracking-widest">Quantity</th>
-                          <th className="px-6 py-4 text-left text-[9px] font-bold text-zinc-500 uppercase tracking-widest">Deadline</th>
-                          <th className="px-6 py-4 text-left text-[9px] font-bold text-zinc-500 uppercase tracking-widest">Bids</th>
-                          <th className="px-6 py-4 text-left text-[9px] font-bold text-zinc-500 uppercase tracking-widest">Status</th>
-                          <th className="px-6 py-4 text-right text-[9px] font-bold text-zinc-500 uppercase tracking-widest">Action</th>
+                       <tr className="bg-zinc-950/20 text-left border-b border-white/[0.03]">
+                          <th className="px-8 py-5 text-[10px] font-bold text-zinc-700 uppercase tracking-[0.2em]">Molecular Node</th>
+                          <th className="px-8 py-5 text-[10px] font-bold text-zinc-700 uppercase tracking-[0.2em]">Volume Density</th>
+                          <th className="px-8 py-5 text-[10px] font-bold text-zinc-700 uppercase tracking-[0.2em]">Deadline Epoch</th>
+                          <th className="px-8 py-5 text-center text-[10px] font-bold text-zinc-700 uppercase tracking-[0.2em]">Bids</th>
+                          <th className="px-8 py-5 text-[10px] font-bold text-zinc-700 uppercase tracking-[0.2em]">Status</th>
+                          <th className="px-8 py-5 text-right text-[10px] font-bold text-zinc-700 uppercase tracking-[0.2em]">Telemetry</th>
                        </tr>
                     </thead>
-                    <tbody className="divide-y divide-border-subtle">
+                    <tbody className="divide-y divide-white/[0.01]">
                        {requests.map((req) => (
-                          <tr key={req.id} className="group hover:bg-zinc-800/30 transition-all">
-                             <td className="px-6 py-4">
-                                <div className="flex items-center gap-3">
-                                   <div className="w-8 h-8 rounded-lg bg-brand/10 flex items-center justify-center text-brand">
-                                      <Package size={14} />
+                          <tr key={req.id} className="group hover:bg-white/[0.02] transition-colors cursor-pointer">
+                             <td className="px-8 py-6">
+                                <div className="flex items-center gap-4">
+                                   <div className="w-10 h-10 rounded-xl bg-zinc-950 border border-white/5 flex items-center justify-center text-zinc-700 group-hover:text-brand group-hover:border-brand transition-all shadow-xl">
+                                      <Package size={16} />
                                    </div>
                                    <div>
-                                      <p className="text-xs font-bold text-white">{req.medicine}</p>
-                                      <p className="text-[9px] text-zinc-600 font-medium uppercase">{req.type}</p>
+                                      <p className="text-xs font-bold text-zinc-200 group-hover:text-white transition-colors">{req.medicine}</p>
+                                      <p className="text-[10px] text-zinc-700 font-bold uppercase tracking-widest mt-1.5">{req.type}</p>
                                    </div>
                                 </div>
                              </td>
-                             <td className="px-6 py-4 text-xs font-bold text-zinc-400">
-                                <span>{req.quantity.split(' ')[0]}</span>
-                                <span className="ml-1 text-[9px] opacity-40 uppercase tracking-tighter">{req.quantity.split(' ')[1]}</span>
-                             </td>
-                             <td className="px-6 py-4">
-                                <span className={`text-[10px] font-bold ${req.deadline === 'Expired' ? 'text-rose-500' : 'text-zinc-500'}`}>
-                                   {req.deadline === 'Expired' && '• '} {req.deadline}
-                                </span>
-                             </td>
-                             <td className="px-6 py-4">
-                                <span className="w-6 h-6 rounded-full bg-brand/5 border border-brand/20 flex items-center justify-center text-[10px] font-bold text-brand leading-none">
-                                   {req.bids}
-                                </span>
-                             </td>
-                             <td className="px-6 py-4">
-                                <div className="flex items-center gap-2">
-                                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
-                                   <span className="text-[10px] font-bold text-emerald-500/80 uppercase tracking-widest">{req.status}</span>
+                             <td className="px-8 py-6">
+                                <div className="flex items-baseline gap-1.5">
+                                  <span className="text-sm font-bold text-zinc-200">{req.quantity.split(' ')[0]}</span>
+                                  <span className="text-[9px] text-zinc-700 font-bold uppercase tracking-widest">{req.quantity.split(' ')[1]}</span>
                                 </div>
                              </td>
-                             <td className="px-6 py-4 text-right">
-                                <button className="p-2 text-zinc-600 hover:text-white transition-all bg-zinc-900 border border-border-subtle rounded-lg">
-                                   <Eye size={14} />
+                             <td className="px-8 py-6">
+                                <span className={`text-[10px] font-bold uppercase tracking-widest ${req.deadline === 'Expired' ? 'text-rose-500' : 'text-zinc-600'}`}>
+                                   {req.deadline}
+                                </span>
+                             </td>
+                             <td className="px-8 py-6">
+                                <div className="flex justify-center">
+                                  <span className="w-8 h-8 rounded-xl bg-zinc-950 border border-white/5 flex items-center justify-center text-[10px] font-bold text-brand shadow-xl">
+                                    {req.bids}
+                                  </span>
+                                </div>
+                             </td>
+                             <td className="px-8 py-6">
+                                <div className="flex items-center gap-2">
+                                   <div className="w-1.5 h-1.5 rounded-full bg-success shadow-[0_0_10px_rgba(34,197,94,0.5)]" />
+                                   <span className="text-[10px] font-bold text-success uppercase tracking-widest leading-none">{req.status}</span>
+                                </div>
+                             </td>
+                             <td className="px-8 py-6 text-right">
+                                <button className="w-10 h-10 flex items-center justify-center bg-zinc-950 border border-white/5 rounded-xl text-zinc-800 hover:text-white transition-all shadow-xl group/btn">
+                                   <Eye size={16} className="group-hover/btn:scale-110 transition-transform" />
                                 </button>
                              </td>
                           </tr>
@@ -172,48 +198,53 @@ export default function B2BModuleView() {
         {/* Sidebar Info Panels */}
         <div className="flex flex-col gap-8">
            {/* Pending Approvals */}
-           <div className="glass-panel p-6 rounded-3xl flex flex-col shadow-xl">
-              <div className="flex items-center justify-between mb-6">
-                 <div className="flex items-center gap-3">
+           <div className="modern-card p-0 overflow-hidden border-white/[0.03] shadow-2xl flex flex-col h-fit bg-white/[0.01]">
+              <div className="p-8 border-b border-white/[0.03] flex items-center justify-between bg-white/[0.01]">
+                 <div className="flex items-center gap-4 text-white">
                     <Users size={18} className="text-brand" />
-                    <h3 className="text-[11px] font-bold text-white uppercase tracking-[0.2em]">Pending Approvals</h3>
+                    <h3 className="text-[10px] font-bold uppercase tracking-[0.3em] leading-none">Authentication Queue</h3>
                  </div>
-                 <span className="bg-rose-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-full">1</span>
+                 <span className="bg-brand text-white text-[9px] font-bold px-3 py-1 rounded-lg border border-white/10 shadow-lg shadow-brand/20 animate-pulse">01 Pending</span>
               </div>
-              <div className="space-y-4">
-                 <div className="flex items-center justify-between p-3 rounded-xl bg-zinc-900/50 border border-border-subtle group hover:border-brand/40 transition-all cursor-pointer">
-                    <div className="flex items-center gap-3">
-                       <div className="w-8 h-8 rounded-full bg-rose-500/10 flex items-center justify-center text-rose-500">
-                          <Users size={14} />
+              <div className="p-8 space-y-6">
+                 <div className="flex items-center justify-between p-5 rounded-2xl bg-zinc-950 border border-white/5 group hover:border-brand transition-all cursor-pointer shadow-inner">
+                    <div className="flex items-center gap-4">
+                       <div className="w-12 h-12 rounded-2xl bg-zinc-900 border border-white/5 flex items-center justify-center text-zinc-700 group-hover:text-brand transition-all">
+                          <Users size={20} />
                        </div>
                        <div>
-                          <p className="text-xs font-bold text-white group-hover:text-brand transition-colors">Test User</p>
-                          <p className="text-[9px] text-zinc-600 font-bold uppercase">No Company</p>
+                          <p className="text-xs font-bold text-zinc-300 group-hover:text-white transition-colors uppercase tracking-tight">Test User Node</p>
+                          <p className="text-[10px] text-zinc-700 font-bold uppercase tracking-widest mt-1.5 flex items-center gap-2">
+                             <div className="w-1 h-1 rounded-full bg-zinc-800" />
+                             Status Override Needed
+                          </p>
                        </div>
                     </div>
-                    <button className="text-zinc-600 hover:text-white">
-                       <Eye size={14} />
+                    <button className="text-zinc-800 hover:text-white transition-colors group/btn p-2 border border-transparent hover:border-white/5 hover:bg-zinc-900 rounded-xl">
+                       <ArrowRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />
                     </button>
                  </div>
               </div>
            </div>
 
            {/* Quick Actions Grid */}
-           <div className="glass-panel p-6 rounded-3xl shadow-xl">
-              <div className="flex items-center gap-3 mb-6">
-                 <Zap size={18} className="text-amber-500" />
-                 <h3 className="text-[11px] font-bold text-white uppercase tracking-[0.2em]">Quick Actions</h3>
+           <div className="modern-card p-10 border-white/[0.03] shadow-2xl bg-brand/5">
+              <div className="flex items-center gap-4 mb-8">
+                 <Zap size={20} className="text-brand" />
+                 <h3 className="text-[10px] font-bold text-white uppercase tracking-[0.3em] leading-none">Quick Orchestration</h3>
               </div>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-4">
                  {[
-                   { label: 'New Request', icon: Plus, bg: 'bg-brand/5', color: 'text-brand' },
-                   { label: 'Providers', icon: Users, bg: 'bg-indigo-500/5', color: 'text-indigo-500' },
-                   { label: 'Quotations', icon: FileCheck, bg: 'bg-emerald-500/5', color: 'text-emerald-500' },
-                   { label: 'All Requests', icon: Package, bg: 'bg-sky-500/5', color: 'text-sky-500' },
+                   { label: 'New Request', icon: Plus, color: 'text-brand' },
+                   { label: 'Nodes [Active]', icon: Users, color: 'text-indigo-400' },
+                   { label: 'Protocols', icon: FileCheck, color: 'text-emerald-400' },
+                   { label: 'Archive Map', icon: Package, color: 'text-sky-400' },
                  ].map((action, i) => (
-                   <button key={i} className={`${action.bg} p-4 rounded-2xl border border-border-subtle hover:border-brand/30 transition-all flex flex-col items-center gap-3 group`}>
-                      <action.icon size={20} className={`${action.color} group-hover:scale-110 transition-transform`} />
-                      <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest">{action.label}</span>
+                   <button key={i} className={`p-6 bg-zinc-950/40 backdrop-blur-3xl rounded-3xl border border-white/5 hover:border-brand transition-all flex flex-col items-center gap-4 group shadow-xl`}>
+                      <div className={`w-12 h-12 rounded-2xl bg-zinc-950 border border-white/5 flex items-center justify-center ${action.color} group-hover:scale-110 group-hover:shadow-2xl transition-all duration-500`}>
+                        <action.icon size={22} />
+                      </div>
+                      <span className="text-[9px] font-bold text-zinc-700 group-hover:text-zinc-300 uppercase tracking-widest transition-colors">{action.label}</span>
                    </button>
                  ))}
               </div>

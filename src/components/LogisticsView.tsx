@@ -16,7 +16,8 @@ import {
   Filter,
   ArrowUpRight,
   ChevronRight,
-  Info
+  Info,
+  Plus
 } from 'lucide-react';
 
 const activeShipments = [
@@ -28,50 +29,57 @@ const activeShipments = [
 
 export default function LogisticsView() {
   return (
-    <div className="space-y-8 pb-12">
+    <div className="space-y-12 pb-12">
       {/* Friendly Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-        <div>
-          <h1 className="text-3xl font-display font-bold text-white tracking-tight">Delivery Tracking</h1>
-          <p className="text-zinc-500 font-medium tracking-tight mt-1">See where your medicine orders are and track delivery progress.</p>
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-8 mb-4 px-2">
+        <div className="space-y-1">
+          <h1 className="text-3xl font-display font-bold text-white tracking-tight flex items-center gap-3">
+            Fleet Intelligence
+            <span className="px-2 py-0.5 rounded bg-brand/10 text-brand text-[9px] font-bold uppercase tracking-widest border border-brand/20">Operational</span>
+          </h1>
+          <p className="text-zinc-600 font-bold uppercase tracking-widest text-[10px] mt-2">Real-time transit monitoring & node orchestration</p>
         </div>
-        <div className="flex gap-3">
-           <button className="flex-1 sm:flex-none px-6 py-2.5 rounded-xl bg-white text-black font-bold text-[10px] uppercase tracking-widest hover:bg-zinc-200 transition-all shadow-xl active:scale-95 group">
-              <span>+ Send New Order</span>
+        <div className="flex gap-4">
+           <button className="px-6 py-3 rounded-2xl border border-white/[0.05] text-zinc-500 font-bold text-[10px] uppercase tracking-widest bg-zinc-950/50 hover:bg-zinc-900 hover:text-white transition-all flex items-center gap-2">
+             <MapIcon size={14} />
+             Live Topology
+           </button>
+           <button className="px-8 py-3 rounded-2xl bg-white text-black font-bold text-[10px] uppercase tracking-widest hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-2 shadow-[0_20px_40px_rgba(255,255,255,0.1)]">
+             <Plus size={14} />
+             Initiate Dispatch
            </button>
         </div>
       </div>
 
       {/* Modern Summary Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {[
-          { label: 'Ready to Pack', val: '124', sub: 'Action Needed', color: 'indigo', icon: Package, tip: 'Medicine orders that are waiting to be put in boxes.' },
-          { label: 'On the Way', val: '89', sub: 'Moving Now', color: 'emerald', icon: Truck, tip: 'Orders that have already left the warehouse and are being delivered.' },
-          { label: 'Delivered', val: '142', sub: 'Today', color: 'blue', icon: CheckCircle2, tip: 'Number of orders that reached their destination today.' },
-          { label: 'Has Issues', val: '4', sub: 'Need Help', color: 'rose', icon: AlertTriangle, tip: 'Orders that are late or have a problem we need to fix.' },
+          { label: 'Pending Dispatch', val: '124', sub: '+12% Velocity', color: 'text-brand', icon: Package, tip: 'Medicine orders that are waiting to be put in boxes.', bg: 'from-brand/10 to-brand/5' },
+          { label: 'Active Transit', val: '89', sub: '92.4% Optimal', color: 'text-success', icon: Truck, tip: 'Orders that have already left the warehouse and are being delivered.', bg: 'from-success/10 to-success/5' },
+          { label: 'Fulfilled Cycle', val: '142', sub: 'On Schedule', color: 'text-brand', icon: CheckCircle2, tip: 'Number of orders that reached their destination today.', bg: 'from-brand/10 to-brand/5' },
+          { label: 'Delayed Nodes', val: '4', sub: 'Critical Action', color: 'text-danger', icon: AlertTriangle, tip: 'Orders that are late or have a problem we need to fix.', bg: 'from-danger/10 to-danger/5' },
         ].map((s, i) => (
-          <div key={i} className="group relative glass-panel p-6 rounded-[2rem] border-zinc-800/40 hover:border-zinc-700/60 transition-all duration-300">
-            {/* Background Glow */}
-            <div className={`absolute inset-0 bg-${s.color}-500/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-[2rem] blur-xl`} />
+          <div key={i} className={`modern-card group border-white/[0.03] relative overflow-hidden bg-gradient-to-br ${s.bg}`}>
+            <div className={`absolute -right-4 -top-4 w-24 h-24 rounded-full blur-[40px] opacity-0 group-hover:opacity-10 transition-opacity duration-700 bg-current ${s.color}`} />
             
             <div className="relative z-10">
-              <div className="flex justify-between items-start mb-6">
-                <div className={`w-12 h-12 rounded-2xl bg-zinc-950 border border-zinc-800 flex items-center justify-center text-${s.color}-400 group-hover:scale-110 transition-transform duration-500`}>
+              <div className="flex justify-between items-start mb-8">
+                <div className={`w-12 h-12 rounded-2xl bg-zinc-950 border border-white/[0.05] flex items-center justify-center ${s.color} group-hover:scale-110 transition-transform duration-500`}>
                   <s.icon size={20} />
                 </div>
                 <div className="group/tip relative mt-1">
-                  <Info size={14} className="text-zinc-600 hover:text-zinc-400 cursor-help transition-colors" />
-                  <div className="absolute bottom-full mb-3 right-0 w-48 p-3 bg-zinc-950/95 backdrop-blur-md border border-zinc-800 rounded-2xl text-[10px] text-zinc-400 font-medium invisible group-hover/tip:visible z-50 shadow-2xl animate-in fade-in zoom-in-95 exit-out duration-200">
+                  <Info size={14} className="text-zinc-800 hover:text-zinc-500 cursor-help transition-colors" />
+                  <div className="absolute bottom-full mb-4 right-0 w-64 p-5 bg-zinc-950/95 backdrop-blur-xl border border-white/10 rounded-2xl text-[10px] text-zinc-500 font-bold uppercase tracking-widest leading-relaxed invisible group-hover/tip:visible z-50 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
                      {s.tip}
                   </div>
                 </div>
               </div>
 
-              <div className="space-y-1">
-                <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-[0.15em]">{s.label}</p>
-                <div className="flex items-baseline gap-2">
-                  <span className="text-4xl font-display font-bold text-white tracking-tight">{s.val}</span>
-                  <span className={`text-[9px] font-bold uppercase tracking-wider text-${s.color}-400/80`}>
+              <div className="space-y-2">
+                <p className="text-[10px] font-bold text-zinc-600 uppercase tracking-[0.2em]">{s.label}</p>
+                <div className="flex items-baseline gap-3">
+                  <span className="text-4xl font-display font-bold text-white tracking-tight group-hover:text-glow transition-all leading-none">{s.val}</span>
+                  <span className={`text-[10px] font-bold uppercase tracking-widest ${s.color}`}>
                     {s.sub}
                   </span>
                 </div>
@@ -83,57 +91,63 @@ export default function LogisticsView() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Simplified Shipping Table */}
-        <div className="lg:col-span-2 glass-panel rounded-3xl overflow-hidden flex flex-col shadow-2xl border-zinc-800/50">
-          <div className="p-6 border-b border-border-subtle">
-            <div className="flex items-center gap-3 mb-4">
-               <Truck size={18} className="text-brand" />
-               <h2 className="text-sm font-bold text-white uppercase tracking-widest">Active Deliveries</h2>
+        <div className="lg:col-span-2 modern-card p-0 overflow-hidden flex flex-col h-[520px] border-white/[0.03]">
+          <div className="p-8 border-b border-white/[0.03] flex flex-col sm:flex-row sm:items-center justify-between gap-6 bg-white/[0.01]">
+            <div className="space-y-1">
+               <h2 className="text-lg font-display font-bold text-white tracking-tight">Active Node Stream</h2>
+               <p className="text-[10px] font-bold text-zinc-600 uppercase tracking-[0.2em]">Real-time Telemetry</p>
             </div>
-            <div className="relative w-full">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600" size={14} />
-              <input type="text" placeholder="Search by Order ID or Shop Name..." className="w-full bg-zinc-950 border border-zinc-800 rounded-xl text-xs px-3 py-2.5 pl-9 outline-none focus:border-brand/40 text-white transition-all" />
+            <div className="relative group min-w-[280px]">
+              <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-800 group-focus-within:text-brand transition-colors" size={14} />
+              <input 
+                type="text" 
+                placeholder="Search Active Nodes..." 
+                className="bg-zinc-950 border border-white/5 focus:border-brand/40 rounded-2xl text-xs px-5 py-3.5 pl-12 outline-none text-white w-full transition-all font-medium" 
+              />
             </div>
           </div>
           
-          <div className="overflow-x-auto">
+          <div className="flex-1 overflow-auto custom-scrollbar">
             <table className="w-full text-left">
-               <thead className="bg-zinc-950/50">
+               <thead className="sticky top-0 bg-zinc-950/80 backdrop-blur-md z-10 border-b border-white/[0.03]">
                   <tr>
-                    <th className="px-6 py-4 text-[10px] font-bold text-zinc-600 uppercase tracking-widest">Order ID</th>
-                    <th className="px-6 py-4 text-[10px] font-bold text-zinc-600 uppercase tracking-widest">Sent To</th>
-                    <th className="px-6 py-4 text-[10px] font-bold text-zinc-600 uppercase tracking-widest">Status</th>
-                    <th className="px-6 py-4 text-[10px] font-bold text-zinc-600 uppercase tracking-widest text-right">Progress</th>
+                    <th className="px-8 py-5 text-[10px] font-bold text-zinc-700 uppercase tracking-[0.2em]">Node ID</th>
+                    <th className="px-8 py-5 text-[10px] font-bold text-zinc-700 uppercase tracking-[0.2em]">Identity</th>
+                    <th className="px-8 py-5 text-[10px] font-bold text-zinc-700 uppercase tracking-[0.2em]">Health</th>
+                    <th className="px-8 py-5 text-[10px] font-bold text-zinc-700 uppercase tracking-[0.2em] text-right">E.T.A</th>
                   </tr>
                </thead>
-               <tbody className="divide-y divide-zinc-800/30">
+               <tbody className="divide-y divide-white/[0.01]">
                   {activeShipments.map((shp) => (
-                    <tr key={shp.id} className="hover:bg-zinc-900/40 transition-all duration-200 group cursor-pointer">
-                      <td className="px-6 py-5">
-                         <p className="text-sm font-bold text-white">{shp.id}</p>
-                         <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-tight">{shp.type}</p>
+                    <tr key={shp.id} className="hover:bg-white/[0.02] transition-colors group cursor-pointer">
+                      <td className="px-8 py-6">
+                         <p className="text-sm font-bold text-zinc-300 group-hover:text-white transition-colors">{shp.id}</p>
+                         <p className="text-[10px] text-zinc-700 font-bold uppercase tracking-widest mt-1.5">{shp.type}</p>
                       </td>
-                      <td className="px-6 py-5">
-                         <p className="text-xs font-bold text-zinc-300">{shp.client}</p>
-                         <p className="text-[9px] text-zinc-600 font-bold uppercase tracking-tight mt-0.5">Via {shp.carrier}</p>
+                      <td className="px-8 py-6">
+                         <p className="text-xs font-bold text-zinc-400 group-hover:text-zinc-200 transition-colors uppercase tracking-tight">{shp.client}</p>
+                         <p className="text-[10px] text-zinc-700 font-bold uppercase tracking-widest mt-1.5">{shp.carrier}</p>
                       </td>
-                      <td className="px-6 py-5">
-                        <div className="flex items-center gap-2">
-                           <div className={`w-1.5 h-1.5 rounded-full ${shp.isAlert ? 'bg-rose-500 animate-pulse shadow-[0_0_8px_rgba(244,63,94,0.5)]' : 'bg-brand'}`} />
-                           <span className={`text-xs font-bold ${shp.isAlert ? 'text-rose-400' : 'text-zinc-200'}`}>{shp.status}</span>
+                      <td className="px-8 py-6">
+                        <div className="flex flex-col gap-3 min-w-[140px]">
+                          <div className="flex items-center justify-between">
+                            <span className={`text-[9px] font-bold uppercase tracking-[0.15em] ${shp.isAlert ? 'text-danger' : 'text-zinc-600'}`}>
+                              {shp.status}
+                            </span>
+                            <span className="text-[9px] font-mono text-zinc-700 font-bold">{shp.progress}%</span>
+                          </div>
+                          <div className="w-full h-1 bg-zinc-950 rounded-full overflow-hidden border border-white/[0.02]">
+                            <motion.div 
+                              initial={{ width: 0 }}
+                              animate={{ width: `${shp.progress}%` }}
+                              className={`h-full rounded-full ${shp.isAlert ? 'bg-danger shadow-[0_0_10px_rgba(239,68,68,0.3)]' : 'bg-brand shadow-[0_0_10px_rgba(99,102,241,0.3)]'}`}
+                            />
+                          </div>
                         </div>
-                        <p className="text-[9px] font-bold text-zinc-600 mt-1 uppercase tracking-tight">Arrives: {shp.eta}</p>
                       </td>
-                      <td className="px-6 py-5">
-                         <div className="flex flex-col items-end gap-1.5">
-                            <span className="text-[10px] font-mono font-bold text-zinc-500">{shp.progress}% Done</span>
-                            <div className="w-20 h-1 bg-zinc-900 rounded-full overflow-hidden">
-                               <motion.div 
-                                 initial={{ width: 0 }}
-                                 animate={{ width: `${shp.progress}%` }}
-                                 className={`h-full rounded-full ${shp.isAlert ? 'bg-rose-500' : 'bg-brand'}`}
-                               />
-                            </div>
-                         </div>
+                      <td className="px-8 py-6 text-right">
+                         <p className="text-sm font-display font-bold text-white leading-none">{shp.eta}</p>
+                         <p className="text-[9px] text-zinc-700 font-bold uppercase tracking-widest mt-2 leading-none">T-Limit</p>
                       </td>
                     </tr>
                   ))}
@@ -143,37 +157,63 @@ export default function LogisticsView() {
         </div>
 
         {/* Map panel */}
-        <div className="space-y-6">
-           <div className="glass-panel rounded-3xl p-6 flex flex-col shadow-2xl border-zinc-800/50">
-              <div className="flex items-center justify-between mb-6">
-                 <h2 className="text-sm font-bold text-white uppercase tracking-widest">Live Driver Map</h2>
+        <div className="modern-card p-1 border-white/[0.03]">
+           <div className="bg-zinc-950 rounded-[inherit] p-8 h-full flex flex-col justify-between border border-white/[0.03]">
+              <div className="flex items-center justify-between mb-8">
+                 <div className="space-y-1">
+                    <h2 className="text-sm font-bold text-white uppercase tracking-widest text-left">Hub Coverage</h2>
+                    <p className="text-[10px] font-bold text-zinc-700 uppercase tracking-widest text-left">Sector 4 Gamma</p>
+                 </div>
+                 <div className="w-10 h-10 rounded-2xl bg-brand/10 flex items-center justify-center text-brand border border-brand/20">
+                   <Navigation size={18} />
+                 </div>
               </div>
-              <div className="aspect-square rounded-2xl bg-zinc-950 border border-zinc-800 relative overflow-hidden group">
-                 <div className="absolute inset-0 bg-[radial-gradient(#27272a_1px,transparent_1px)] [background-size:20px_20px] opacity-20" />
+              
+              <div className="flex-1 rounded-3xl bg-zinc-950 border border-white/[0.05] relative overflow-hidden group shadow-inner">
+                 <div className="absolute inset-0 bg-[radial-gradient(#1a1a1c_1px,transparent_1px)] [background-size:24px_24px] opacity-20" />
                  
-                 <svg className="absolute inset-0 w-full h-full p-6" viewBox="0 0 100 100">
-                    <path d="M 10 90 Q 50 10 90 90" fill="none" stroke="#27272a" strokeWidth="1" strokeDasharray="3 3" />
+                 <svg className="absolute inset-0 w-full h-full p-12" viewBox="0 0 100 100">
+                    <path d="M 10 90 Q 50 10 90 90" fill="none" stroke="rgba(255,255,255,0.03)" strokeWidth="1" strokeDasharray="4 4" />
                     <motion.circle 
                       animate={{ offsetDistance: ["0%", "100%"] }}
-                      transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
-                      r="2.5" fill="#4f46e5"
+                      transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+                      r="3" fill="#6366f1"
                       style={{ offsetPath: "path('M 10 90 Q 50 10 90 90')" }}
-                      className="shadow-[0_0_10px_#4f46e5]"
+                      className="shadow-[0_0_15px_#6366f1]"
                     />
-                    <circle cx="10" cy="90" r="3" fill="#10b981" />
-                    <circle cx="90" cy="90" r="3" fill="#3b82f6" />
+                    <circle cx="10" cy="90" r="4" fill="#10b981" />
+                    <circle cx="90" cy="90" r="4" fill="#4338ca" />
+                    <circle cx="50" cy="10" r="2" fill="rgba(255,255,255,0.1)" />
                  </svg>
 
-                 <div className="absolute bottom-4 left-4 right-4 p-3 bg-zinc-900 border border-zinc-800 rounded-xl shadow-2xl">
-                    <div className="flex items-center gap-3">
-                       <div className="w-8 h-8 rounded-lg bg-brand/10 flex items-center justify-center text-brand border border-brand/20">
-                          <Navigation size={16} />
+                 <div className="absolute bottom-4 left-4 right-4 p-4 bg-zinc-950/90 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl">
+                    <div className="flex items-center gap-4">
+                       <div className="relative">
+                         <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix&backgroundColor=121214" alt="Driver" className="w-10 h-10 rounded-2xl bg-zinc-900 border border-white/5 grayscale group-hover:grayscale-0 transition-all duration-700" />
+                         <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-success border-4 border-zinc-950 rounded-full shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
                        </div>
-                       <div>
-                           <p className="text-[10px] font-bold text-white truncate max-w-[120px]">Driver: Sarah Jones</p>
-                           <p className="text-[9px] text-zinc-600 uppercase font-bold tracking-tight mt-0.5">MED-330 (Electric Van)</p>
+                       <div className="flex-1 min-w-0">
+                           <p className="text-[10px] font-bold text-white truncate uppercase tracking-widest">Sarah Jenkins</p>
+                           <p className="text-[9px] text-zinc-700 uppercase font-bold tracking-[0.2em] mt-1 flex items-center gap-2">
+                             <Truck size={10} />
+                             MED-330
+                           </p>
                        </div>
+                       <button className="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center text-white transition-colors">
+                         <ChevronRight size={14} />
+                       </button>
                     </div>
+                 </div>
+              </div>
+              
+              <div className="mt-8 pt-6 border-t border-white/[0.03] grid grid-cols-2 gap-8">
+                 <div>
+                   <p className="text-[10px] font-bold text-zinc-700 uppercase tracking-widest mb-2">Fleet Load</p>
+                   <p className="text-xl font-display font-bold text-white leading-none">82.4%</p>
+                 </div>
+                 <div className="text-right">
+                   <p className="text-[10px] font-bold text-zinc-700 uppercase tracking-widest mb-2">Operational</p>
+                   <p className="text-xl font-display font-bold text-white leading-none">12 / 15</p>
                  </div>
               </div>
            </div>

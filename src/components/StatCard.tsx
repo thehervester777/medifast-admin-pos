@@ -19,37 +19,53 @@ interface StatCardProps {
 export default function StatCard({ label, value, change, isPositive, icon: Icon, subtitle, delay = 0 }: StatCardProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay }}
-      className="glass-panel p-5 rounded-xl group hover:border-brand/40 hover:shadow-2xl hover:shadow-brand/5 transition-all duration-500"
+      transition={{ 
+        delay, 
+        duration: 0.8, 
+        ease: [0.19, 1, 0.22, 1] 
+      }}
+      className="modern-card group relative overflow-hidden"
     >
-      <div className="flex items-start justify-between mb-3">
-        <div className="w-10 h-10 rounded-xl bg-zinc-900 border border-border-subtle flex items-center justify-center text-zinc-500 group-hover:bg-brand group-hover:text-white group-hover:border-transparent transition-all duration-500">
-          <Icon size={20} />
-        </div>
-        <div className={`flex items-center gap-1 text-[9px] font-bold px-1.5 py-0.5 rounded-md uppercase tracking-wider ${isPositive ? 'bg-emerald-500/10 text-emerald-500' : 'bg-rose-500/10 text-rose-500'}`}>
-          {isPositive ? <TrendingUp size={9} /> : <TrendingDown size={9} />}
-          {change}
-        </div>
-      </div>
+      {/* Subtle Background Glow */}
+      <div className={`absolute -right-4 -top-4 w-24 h-24 rounded-full blur-[40px] opacity-0 group-hover:opacity-10 transition-opacity duration-700 ${isPositive ? 'bg-success' : 'bg-danger'}`} />
       
-      <div>
-        <h3 className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1">{label}</h3>
-        <div className="flex items-baseline gap-2">
-          <span className="text-xl font-display font-bold text-white tracking-tight">{value}</span>
-          {subtitle && <span className="text-[9px] text-zinc-600 font-bold uppercase tracking-widest">{subtitle}</span>}
+      <div className="relative z-10">
+        <div className="flex items-start justify-between mb-8">
+          <div className="w-12 h-12 rounded-[1.25rem] bg-zinc-950 border border-white/[0.05] flex items-center justify-center text-zinc-500 group-hover:text-white group-hover:bg-brand group-hover:border-transparent transition-all duration-500 group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-brand/20">
+            <Icon size={20} />
+          </div>
+          <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[10px] font-bold uppercase tracking-widest ${isPositive ? 'bg-success/10 text-success' : 'bg-danger/10 text-danger'} border border-white/[0.03]`}>
+            {isPositive ? <TrendingUp size={12} strokeWidth={3} /> : <TrendingDown size={12} strokeWidth={3} />}
+            {change}
+          </div>
         </div>
-      </div>
+        
+        <div className="space-y-1">
+          <h3 className="text-[10px] font-bold text-zinc-500 uppercase tracking-[0.2em]">{label}</h3>
+          <div className="flex items-baseline gap-2">
+            <span className="text-3xl font-display font-bold text-white tracking-tight group-hover:text-glow transition-all duration-500">{value}</span>
+            {subtitle && <span className="text-[10px] text-zinc-600 font-bold uppercase tracking-widest">{subtitle}</span>}
+          </div>
+        </div>
 
-      <div className="mt-4 pt-4 border-t border-border-subtle">
-        <div className="h-1 w-full bg-zinc-900 rounded-full overflow-hidden">
-          <motion.div 
-            initial={{ width: 0 }}
-            animate={{ width: isPositive ? '70%' : '30%' }}
-            transition={{ delay: delay + 0.5, duration: 1 }}
-            className={`h-full rounded-full ${isPositive ? 'bg-indigo-500 shadow-[0_0_8px_rgba(79,70,229,0.5)]' : 'bg-rose-500'}`}
-          />
+        {/* Progress bar refinement */}
+        <div className="mt-8 space-y-2">
+          <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-zinc-600">
+            <span>Utilization</span>
+            <span>{isPositive ? '82%' : '24%'}</span>
+          </div>
+          <div className="h-1.5 w-full bg-zinc-950 rounded-full overflow-hidden border border-white/[0.02]">
+            <motion.div 
+              initial={{ width: 0 }}
+              animate={{ width: isPositive ? '82%' : '24%' }}
+              transition={{ delay: delay + 0.6, duration: 1.5, ease: [0.19, 1, 0.22, 1] }}
+              className={`h-full rounded-full relative ${isPositive ? 'bg-success shadow-[0_0_15px_rgba(16,185,129,0.3)]' : 'bg-danger shadow-[0_0_15px_rgba(239,68,68,0.3)]'}`}
+            >
+              <div className="absolute inset-0 shimmer opacity-20" />
+            </motion.div>
+          </div>
         </div>
       </div>
     </motion.div>

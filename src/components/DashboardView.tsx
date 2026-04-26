@@ -11,32 +11,27 @@ import {
   YAxis, 
   CartesianGrid, 
   Tooltip, 
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  Cell
+  ResponsiveContainer
 } from 'recharts';
 import { 
   TrendingUp, 
-  ClipboardList, 
-  BarChart3, 
   Package, 
   Truck,
-  Bell,
-  MoreVertical,
   ChevronRight,
-  ArrowRight,
-  ArrowUpRight,
-  Zap,
   Activity,
-  Box,
-  Plus,
-  Users,
-  AlertCircle,
+  ShoppingCart,
+  ShoppingBag,
+  ListTodo,
+  Heart,
+  RotateCcw,
+  Clock,
+  Ban,
+  Archive,
   CheckCircle2,
-  Info
+  AlertCircle,
+  Calendar,
+  ArrowRightCircle
 } from 'lucide-react';
-import StatCard from './StatCard.tsx';
 
 const data = [
   { name: 'Mon', orders: 40, revenue: 2400 },
@@ -48,185 +43,312 @@ const data = [
   { name: 'Sun', orders: 34, revenue: 4300 },
 ];
 
+const statusCards = [
+  { label: 'Pending', value: '104', icon: Clock, color: 'brand' },
+  { label: 'Accepted', value: '0', icon: CheckCircle2, color: 'success' },
+  { label: 'In Process', value: '18', icon: ShoppingCart, color: 'brand' },
+  { label: 'Picked Up', value: '0', icon: Package, color: 'brand' },
+  { label: 'Rescheduled', value: '0', icon: RotateCcw, color: 'warning' },
+  { label: 'Delivered', value: '1,969', icon: Truck, color: 'success' },
+  { label: 'Cancelled', value: '157', icon: Ban, color: 'danger' },
+  { label: 'Returned', value: '2', icon: Archive, color: 'danger' },
+  { label: 'Due', value: '1', icon: AlertCircle, color: 'warning' },
+];
+
+const criticalProducts = [
+  { id: 'PRD-102', name: 'Amoxicillin 500mg', status: 'Low Stock', value: '12 units', color: 'text-danger', bg: 'bg-danger/10' },
+  { id: 'PRD-405', name: 'Surgical Masks (N95)', status: 'Expiring', value: '4 days', color: 'text-warning', bg: 'bg-warning/10' },
+  { id: 'PRD-882', name: 'Insulin Glargine', status: 'Temp Alert', value: '7.2°C', color: 'text-danger', bg: 'bg-danger/10' },
+];
+
+const topCategories = [
+  { name: 'Pharmaceuticals', sales: '840k', growth: '+12%', progress: 85 },
+  { name: 'Surgical Equipment', sales: '520k', growth: '+5%', progress: 65 },
+  { name: 'Diagnostics', sales: '310k', growth: '+18%', progress: 45 },
+  { name: 'PPE & Safety', sales: '120k', growth: '-2%', progress: 30 },
+];
+
 export default function DashboardView() {
   return (
-    <div className="space-y-6">
-      {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
-        <div>
-          <h1 className="text-2xl font-display font-bold text-white tracking-tight">Overview Dashboard</h1>
-          <p className="text-zinc-500 font-medium tracking-tight text-sm">Real-time logistics & operation metrics for <span className="text-brand font-bold">all facilities</span>.</p>
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+      {/* Updated Header Section */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-8 mb-4 px-2">
+        <div className="space-y-1">
+          <h1 className="text-3xl font-display font-bold text-white tracking-tight flex items-center gap-3">
+            MediFast <span className="text-brand">Command</span>
+            <span className="px-2 py-0.5 rounded bg-brand/10 text-brand text-[9px] font-bold uppercase tracking-widest border border-brand/20">Operational Root</span>
+          </h1>
+          <p className="text-zinc-600 font-bold uppercase tracking-widest text-[10px] mt-2 italic flex items-center gap-2">
+            <div className="w-1.5 h-1.5 rounded-full bg-success shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
+            Core Analytics • System Pulse: Nominal
+          </p>
         </div>
-        <div className="flex gap-3">
-           <button className="flex-1 sm:flex-none px-4 py-2 rounded-xl border border-border-subtle text-zinc-400 font-bold text-xs uppercase tracking-widest bg-zinc-900 hover:bg-zinc-800 transition-all text-center">Export</button>
-           <button className="flex-1 sm:flex-none px-4 py-2 rounded-xl bg-white text-black font-bold text-xs uppercase tracking-widest shadow-lg hover:bg-zinc-200 active:scale-[0.98] transition-all text-center">+ New Order</button>
-        </div>
-      </div>
-
-      {/* Grid Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
-        <StatCard label="Total GMV" value="$2.4M" change="+12.5%" isPositive={true} icon={TrendingUp} delay={0.1} />
-        <StatCard label="Total Orders" value="1,284" change="+5.2%" isPositive={true} icon={ClipboardList} delay={0.2} />
-        <StatCard label="Fill Rate" value="98.2%" change="Target: 98.0%" isPositive={true} icon={BarChart3} delay={0.3} />
-        <StatCard label="Backorders" value="42" change="+12 critical" isPositive={false} icon={Package} delay={0.4} />
-        <StatCard label="On-Time Del." value="94.5%" change="-1.2% vs LW" isPositive={false} icon={Truck} delay={0.5} />
-        <StatCard label="Inv. Value" value="$12.8M" subtitle="Across 3 hubs" change="+0.8%" isPositive={true} icon={Package} delay={0.6} />
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Main Chart */}
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.98 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.7 }}
-          className="lg:col-span-2 glass-panel p-6 rounded-[1.5rem] shadow-xl relative overflow-hidden"
-        >
-          <div className="flex items-center justify-between mb-6">
-             <div>
-                <h2 className="text-lg font-display font-bold text-white tracking-tight">Predictive Fulfillment Analysis</h2>
-                <p className="text-zinc-500 text-[10px] font-bold uppercase tracking-widest mt-1">AI-Projected volume vs Actuals</p>
-             </div>
-             <div className="flex gap-2">
-                <div className="flex items-center gap-2 px-3 py-1 bg-brand/10 rounded-lg text-[10px] font-bold text-brand uppercase tracking-widest border border-brand/20">
-                   <Zap size={12} />
-                   <span>ML Optimized</span>
-                </div>
-             </div>
-          </div>
-          
-          <div className="h-[350px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
-               <BarChart data={data}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#27272a" />
-                  <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#71717a', fontSize: 10, fontWeight: 'bold' }} dy={10} />
-                  <YAxis axisLine={false} tickLine={false} tick={{ fill: '#71717a', fontSize: 10, fontWeight: 'bold' }} />
-                  <Tooltip 
-                    cursor={{ fill: '#18181b', opacity: 0.5 }} 
-                    contentStyle={{ backgroundColor: '#121214', borderRadius: '0.75rem', border: '1px solid #27272a', boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.5)' }}
-                    itemStyle={{ color: '#fff', fontSize: '12px', fontWeight: 'bold' }}
-                  />
-                  <Bar dataKey="orders" fill="#4f46e5" radius={[4, 4, 0, 0]} barSize={32}>
-                     {data.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={index === data.length - 1 ? '#818cf8' : '#4f46e5'} />
-                     ))}
-                  </Bar>
-                  <Bar dataKey="revenue" fill="#312e81" radius={[4, 4, 0, 0]} barSize={12} />
-               </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </motion.div>
-
-        {/* Live Activity */}
-        <motion.div 
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.8 }}
-          className="glass-panel p-8 rounded-[2rem] flex flex-col"
-        >
-          <h2 className="text-xl font-display font-bold text-white mb-6 tracking-tight">Timeline Activity</h2>
-          <div className="space-y-6 overflow-y-auto pr-2 custom-scrollbar">
-            {[
-              { type: 'delivered', title: 'Order Delivered', desc: 'ORD-9921 delivered to St. Jude\'s Hospital.', time: '2 mins ago', color: 'bg-emerald-500' },
-              { type: 'created', title: 'New PO Created', desc: 'PO-442 created for 10,000 N95 Masks.', time: '15 mins ago', color: 'bg-indigo-500' },
-              { type: 'stock', title: 'Stock Adjustment', desc: 'Sarah J. adjusted inventory for Item #882.', time: '1 hour ago', color: 'bg-amber-500' },
-              { type: 'client', title: 'New Client Onboarded', desc: 'City Pharmacy Group added to platform.', time: '3 hours ago', color: 'bg-brand' },
-            ].map((activity, i) => (
-              <div key={i} className="flex gap-5 group">
-                <div className="relative flex flex-col items-center">
-                  <div className={`w-2.5 h-2.5 rounded-full ${activity.color} ring-4 ring-surface-raised shadow-sm z-10 group-hover:scale-125 transition-transform duration-300`} />
-                  {i < 3 && <div className="w-[1px] h-full bg-zinc-800 absolute top-3" />}
-                </div>
-                <div className="pb-4">
-                  <h4 className="text-sm font-bold text-zinc-100">{activity.title}</h4>
-                  <p className="text-xs text-zinc-500 mt-1.5 leading-relaxed tracking-tight">{activity.desc}</p>
-                  <span className="text-[10px] font-bold text-zinc-600 mt-2 block uppercase tracking-widest">{activity.time}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 pb-8">
-        {/* Intelligence feed */}
-        <div className="glass-panel p-6 rounded-[1.5rem] shadow-xl flex flex-col">
-           <div className="flex items-center justify-between mb-6">
-              <h2 className="text-lg font-display font-bold text-white tracking-tight">Intelligence</h2>
-              <Bell size={18} className="text-zinc-600" />
-           </div>
-           <div className="space-y-4 flex-1 overflow-y-auto custom-scrollbar">
-              {[
-                { type: 'alert', title: 'Cold Chain Anomaly', desc: 'Unit SHP-092 report 5.1°C peak near Dallas.', time: '2m ago', icon: AlertCircle, color: 'text-rose-500', bg: 'bg-rose-500/5', border: 'border-rose-500/10' },
-                { type: 'success', title: 'Bulk Order Cleared', desc: 'St. Mary\'s monthly shipment authenticated.', time: '14m ago', icon: CheckCircle2, color: 'text-emerald-500', bg: 'bg-emerald-500/5', border: 'border-emerald-500/10' },
-                { type: 'info', title: 'Inventory Re-balanced', desc: 'Surgical kits migrated to Hub Alpha.', time: '1h ago', icon: Info, color: 'text-brand', bg: 'bg-brand/5', border: 'border-brand/10' },
-              ].map((item, i) => (
-                <div key={i} className={`flex gap-4 p-4 rounded-2xl border ${item.border} ${item.bg} hover:bg-zinc-900/50 hover:border-zinc-800 transition-all duration-300 group cursor-pointer`}>
-                   <div className={`w-10 h-10 rounded-xl ${item.bg} flex items-center justify-center ${item.color} shrink-0 border ${item.border} group-hover:scale-110 transition-transform`}>
-                      <item.icon size={20} />
-                   </div>
-                   <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between mb-1">
-                         <p className="text-xs font-bold text-white group-hover:text-brand transition-colors truncate">{item.title}</p>
-                         <span className="text-[8px] text-zinc-600 font-bold uppercase shrink-0">{item.time}</span>
-                      </div>
-                      <p className="text-[10px] text-zinc-500 font-medium leading-relaxed line-clamp-2">{item.desc}</p>
-                   </div>
-                </div>
-              ))}
-           </div>
-           <button className="mt-8 w-full py-3 bg-zinc-900 border border-border-subtle rounded-xl text-[10px] font-bold text-zinc-500 uppercase tracking-widest hover:text-white hover:bg-zinc-800 transition-all">
-              View Audit Logs
+        <div className="flex gap-4">
+           <button className="px-6 py-3 rounded-2xl bg-zinc-950 border border-white/5 text-zinc-500 font-bold text-[10px] uppercase tracking-widest hover:text-white hover:border-white/10 transition-all flex items-center gap-2">
+              <Calendar size={14} />
+              <span>Time Horizon</span>
+           </button>
+           <button className="px-8 py-3 rounded-2xl bg-white text-black font-bold text-[10px] uppercase tracking-widest hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-2 shadow-[0_20px_40px_rgba(255,255,255,0.1)]">
+              <Activity size={14} />
+              <span>Global Audit</span>
            </button>
         </div>
+      </div>
 
-        {/* Quick Actions */}
-        <div className="glass-panel p-8 rounded-[2rem]">
-           <h2 className="text-xl font-display font-bold text-white mb-6 tracking-tight">Operations</h2>
-           <div className="grid grid-cols-2 gap-4">
-              {[
-                { label: 'Create PO', icon: Plus },
-                { label: 'New Ship.', icon: Truck },
-                { label: 'Add Client', icon: Users },
-                { label: 'Adjustment', icon: Package },
-              ].map((action, i) => (
-                <button key={i} className="flex flex-col items-center justify-center gap-3 p-5 rounded-2xl border border-zinc-800 bg-zinc-900 shadow-sm hover:border-brand/50 hover:bg-zinc-800 transition-all group">
-                   <div className="w-10 h-10 rounded-lg bg-zinc-800 flex items-center justify-center text-zinc-600 group-hover:bg-brand group-hover:text-white transition-all">
-                      <action.icon size={20} />
-                   </div>
-                   <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest group-hover:text-white">{action.label}</span>
-                </button>
-              ))}
-           </div>
+      {/* Status Grid (9 Cards) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+        {statusCards.map((card, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.05 }}
+            whileHover={{ y: -5, scale: 1.02 }}
+            className="modern-card group relative overflow-hidden h-28 flex flex-col justify-between border border-white/[0.03] hover:border-brand/30 hover:shadow-brand/5"
+          >
+            <div className="absolute top-0 right-0 w-16 h-16 bg-brand/5 blur-2xl rounded-full -mr-8 -mt-8 group-hover:bg-brand/10 transition-colors" />
+            <div className="flex justify-between items-start relative z-10">
+              <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-zinc-500 group-hover:text-white transition-colors">
+                {card.label}
+              </span>
+              <card.icon size={14} className="text-zinc-600 group-hover:text-brand transition-colors" />
+            </div>
+            <div className="flex items-end justify-between relative z-10">
+              <span className="text-2xl font-display font-bold text-white leading-none">
+                {card.value}
+              </span>
+              <div className="flex items-center gap-1">
+                <div className="w-1 h-3 bg-brand/20 rounded-full overflow-hidden">
+                   <div className="h-full bg-brand animate-pulse" style={{ height: '60%' }} />
+                </div>
+                <div className="w-1 h-5 bg-brand/20 rounded-full overflow-hidden">
+                   <div className="h-full bg-brand animate-pulse" style={{ height: '80%' }} />
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        {/* Statistics Chart & Advanced Visuals */}
+        <div className="lg:col-span-9 space-y-8">
+          <div className="modern-card p-0 flex flex-col h-[550px] relative overflow-hidden group">
+            {/* Decorative Grid */}
+            <div className="absolute inset-0 opacity-[0.02] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
+            
+            <div className="p-8 border-b border-white/[0.03] flex items-center justify-between relative z-10">
+              <div>
+                <h2 className="text-xl font-display font-bold text-white tracking-tight flex items-center gap-3">
+                  Market Performance
+                  <span className="px-2 py-0.5 rounded bg-brand/10 text-brand text-[9px] font-bold uppercase tracking-widest border border-brand/20">Alpha Stream</span>
+                </h2>
+                <p className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest mt-2 flex items-center gap-2">
+                  <Activity size={10} className="text-success animate-pulse" />
+                  Real-time synchronization across 4 regions
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                {['D', 'W', 'M', 'Y'].map(period => (
+                  <button key={period} className={`w-8 h-8 rounded-lg flex items-center justify-center text-[10px] font-bold uppercase transition-all ${period === 'W' ? 'bg-brand text-white shadow-lg shadow-brand/20' : 'text-zinc-600 hover:bg-white/5'}`}>
+                    {period}
+                  </button>
+                ))}
+              </div>
+            </div>
+            
+            <div className="flex-1 p-8 relative z-10">
+              <div className="w-full h-full relative group">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={data}>
+                    <defs>
+                      <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#6366f1" stopOpacity={0.1} />
+                        <stop offset="100%" stopColor="#6366f1" stopOpacity={0} />
+                      </linearGradient>
+                      <filter id="glow">
+                        <feGaussianBlur stdDeviation="3" result="blur" />
+                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                      </filter>
+                    </defs>
+                    <CartesianGrid strokeDasharray="4 4" vertical={false} stroke="rgba(255,255,255,0.02)" />
+                    <XAxis 
+                      dataKey="name" 
+                      axisLine={false} 
+                      tickLine={false} 
+                      tick={{ fill: '#3f3f46', fontSize: 10, fontWeight: '700' }} 
+                      dy={15} 
+                    />
+                    <YAxis 
+                      axisLine={false} 
+                      tickLine={false} 
+                      tick={{ fill: '#3f3f46', fontSize: 10, fontWeight: '700' }} 
+                    />
+                    <Tooltip 
+                      cursor={{ stroke: '#6366f1', strokeWidth: 1, strokeDasharray: '4 4' }} 
+                      content={({ active, payload }) => {
+                        if (active && payload && payload.length) {
+                          return (
+                            <div className="bg-zinc-950/90 backdrop-blur-xl border border-white/10 p-4 rounded-2xl shadow-2xl">
+                              <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2">{payload[0].payload.name}</p>
+                              <div className="space-y-1">
+                                <p className="text-xl font-display font-bold text-white flex items-center gap-2">
+                                  {payload[0].value} <span className="text-[10px] font-sans text-zinc-600">Orders</span>
+                                </p>
+                                <p className="text-xs font-medium text-brand">
+                                  Revenue: ${payload[0].payload.revenue.toLocaleString()}
+                                </p>
+                              </div>
+                            </div>
+                          );
+                        }
+                        return null;
+                      }}
+                    />
+                    <Area 
+                      type="monotone" 
+                      dataKey="orders" 
+                      stroke="#6366f1" 
+                      strokeWidth={3} 
+                      fill="url(#areaGradient)" 
+                      animationDuration={2000}
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            {/* Bottom Bar Metrics */}
+            <div className="px-8 py-4 bg-white/[0.01] border-t border-white/[0.03] flex items-center justify-between">
+               <div className="flex items-center gap-8">
+                  {[
+                    { label: 'Avg Sale', value: '$420.50', trend: '+2.4%' },
+                    { label: 'Latency', value: '42ms', trend: 'Optimal' },
+                    { label: 'Uptime', value: '99.98%', trend: 'Stable' }
+                  ].map((stat, i) => (
+                    <div key={i}>
+                      <span className="text-[9px] font-bold text-zinc-700 uppercase tracking-widest block">{stat.label}</span>
+                      <div className="flex items-center gap-2 mt-0.5">
+                        <span className="text-xs font-bold text-zinc-300">{stat.value}</span>
+                        <span className="text-[8px] font-bold text-success">{stat.trend}</span>
+                      </div>
+                    </div>
+                  ))}
+               </div>
+               <button className="flex items-center gap-2 text-[10px] font-bold text-zinc-500 hover:text-white transition-colors">
+                 EXPORT PDF <ArrowRightCircle size={14} />
+               </button>
+            </div>
+          </div>
+
+          {/* New Advanced Info Strip */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="modern-card p-6 flex items-center gap-6 overflow-hidden relative">
+               <div className="absolute top-0 right-0 p-8 opacity-[0.02] -mr-4 -mt-4">
+                  <Package size={140} />
+               </div>
+               <div className="w-16 h-16 rounded-2xl bg-brand/5 border border-brand/20 flex items-center justify-center text-brand shrink-0">
+                  <Package size={32} />
+               </div>
+               <div>
+                  <h3 className="text-lg font-display font-bold text-white tracking-tight">Active Shipments</h3>
+                  <p className="text-xs text-zinc-500 mt-1 leading-relaxed">You have 12 high-priority medical shipments in transit globally.</p>
+                  <div className="flex items-center gap-4 mt-4">
+                     <span className="text-xs font-bold text-brand uppercase tracking-widest cursor-pointer hover:underline">Track All</span>
+                     <span className="text-xs font-bold text-zinc-700 uppercase tracking-widest cursor-pointer hover:underline">Manifests</span>
+                  </div>
+               </div>
+            </div>
+
+            <div className="modern-card p-6 flex items-center gap-6 overflow-hidden relative border-success/20">
+               <div className="absolute top-0 right-0 p-8 opacity-[0.02] -mr-4 -mt-4">
+                  <Heart size={140} className="text-success" />
+               </div>
+               <div className="w-16 h-16 rounded-2xl bg-success/5 border border-success/20 flex items-center justify-center text-success shrink-0">
+                  <Heart size={32} />
+               </div>
+               <div>
+                  <h3 className="text-lg font-display font-bold text-white tracking-tight">Health Analytics</h3>
+                  <p className="text-xs text-zinc-500 mt-1 leading-relaxed">Inventory levels are 84% healthy based on current demand velocity.</p>
+                  <div className="flex items-center gap-4 mt-4">
+                     <span className="text-xs font-bold text-success uppercase tracking-widest cursor-pointer hover:underline">View Report</span>
+                     <span className="text-xs font-bold text-zinc-700 uppercase tracking-widest cursor-pointer hover:underline">Audit</span>
+                  </div>
+               </div>
+            </div>
+          </div>
         </div>
 
-        {/* Top Selling Category */}
-        <div className="bg-indigo-600 p-8 rounded-[2rem] text-white overflow-hidden relative group shadow-2xl shadow-indigo-600/20">
-           <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700" />
-           <div className="relative z-10 flex flex-col h-full">
-              <div className="flex justify-between items-start mb-6">
-                 <div>
-                    <h2 className="text-xl font-display font-bold mb-1 tracking-tight">Market Insight</h2>
-                    <p className="text-indigo-200 text-[10px] font-bold uppercase tracking-widest">Performance Week Over Week</p>
-                 </div>
-                 <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center backdrop-blur-md">
-                    <TrendingUp size={20} />
-                 </div>
+        {/* Right Sidebar: Quick Actions & Intelligence */}
+        <div className="lg:col-span-3 space-y-8">
+          <div className="modern-card p-8 bg-brand/5 border-brand/20 relative overflow-hidden group">
+            <div className="absolute top-0 right-0 w-24 h-24 bg-brand/20 blur-[60px] rounded-full -mr-12 -mt-12 group-hover:bg-brand/30 transition-all" />
+            
+            <div className="relative z-10">
+              <h2 className="text-xl font-display font-bold text-white tracking-tight mb-2">Smart Actions</h2>
+              <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest mb-8">AI-Powered Optimization</p>
+              
+              <div className="space-y-2">
+                {[
+                  { label: 'Reorder Low Stock', icon: RotateCcw, color: 'text-brand', bg: 'bg-brand/10' },
+                  { label: 'Dispatch Pending', icon: Truck, color: 'text-success', bg: 'bg-success/10' },
+                  { label: 'Audit Inventory', icon: Archive, color: 'text-warning', bg: 'bg-warning/10' },
+                  { label: 'System Update', icon: Clock, color: 'text-zinc-400', bg: 'bg-zinc-800/10' },
+                ].map((action, i) => (
+                  <button 
+                    key={i}
+                    className="w-full flex items-center justify-between p-3 rounded-2xl bg-zinc-950/40 border border-white/[0.03] hover:border-brand/40 hover:bg-zinc-900/60 transition-all group/btn"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`p-2 rounded-xl ${action.bg} ${action.color} group-hover/btn:scale-110 transition-transform`}>
+                        <action.icon size={14} />
+                      </div>
+                      <span className="text-xs font-bold text-zinc-300 group-hover/btn:text-white transition-colors uppercase tracking-tight">{action.label}</span>
+                    </div>
+                    <ChevronRight size={14} className="text-zinc-700 group-hover/btn:text-brand transition-colors" />
+                  </button>
+                ))}
               </div>
               
-              <div className="mb-10">
-                 <div className="flex items-baseline gap-2 mb-2">
-                    <h4 className="text-3xl font-display font-bold">Surgical Supplies</h4>
-                 </div>
-                 <div className="flex items-center gap-3">
-                    <span className="text-2xl font-mono text-white/90">$84.2K</span>
-                    <span className="text-[10px] font-bold text-emerald-300 uppercase">+14.2%</span>
-                 </div>
-              </div>
-              
-              <button className="w-full mt-auto bg-white text-black py-3 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-zinc-200 active:scale-[0.98] transition-all shadow-xl">
-                Generate Report
+              <button className="w-full mt-6 py-4 bg-white text-black rounded-2xl text-[10px] font-bold uppercase tracking-[0.2em] hover:scale-[1.02] active:scale-[0.98] transition-all shadow-[0_20px_40px_rgba(255,255,255,0.1)]">
+                Launch Wizard
               </button>
-           </div>
+            </div>
+          </div>
+
+          <div className="modern-card p-1">
+             <div className="bg-zinc-950 rounded-[inherit] p-7 h-full flex flex-col justify-between border border-white/[0.03]">
+                <div className="flex items-center justify-between mb-8">
+                   <h3 className="text-xs font-bold text-white uppercase tracking-widest">Global Status</h3>
+                   <div className="flex -space-x-2">
+                      {[1,2,3].map(i => (
+                        <div key={i} className="w-6 h-6 rounded-full border border-zinc-950 bg-zinc-900 flex items-center justify-center text-[8px] font-bold text-zinc-500">
+                           {i}
+                        </div>
+                      ))}
+                   </div>
+                </div>
+                
+                <div className="space-y-6">
+                   <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest">Efficiency</span>
+                      <span className="text-xs font-bold text-success">94.2%</span>
+                   </div>
+                   <div className="h-1 w-full bg-zinc-900 rounded-full overflow-hidden">
+                      <div className="h-full bg-brand shimmer" style={{ width: '94.2%' }} />
+                   </div>
+                </div>
+
+                <div className="mt-12 text-center">
+                   <p className="text-[9px] font-bold text-zinc-700 uppercase tracking-[0.3em] mb-4">Operations Hub</p>
+                   <div className="flex justify-center gap-3">
+                      <div className="w-1.5 h-1.5 rounded-full bg-success shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+                      <div className="w-1.5 h-1.5 rounded-full bg-brand shadow-[0_0_8px_rgba(99,102,241,0.5)]" />
+                      <div className="w-1.5 h-1.5 rounded-full bg-warning shadow-[0_0_8px_rgba(245,158,11,0.5)]" />
+                   </div>
+                </div>
+             </div>
+          </div>
         </div>
       </div>
     </div>

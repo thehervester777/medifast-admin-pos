@@ -2,215 +2,187 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { 
   Users, 
-  UserPlus, 
-  Gift, 
+  ChevronRight, 
   Share2, 
-  Award, 
-  TrendingUp, 
-  Search, 
-  Copy, 
-  MoreHorizontal,
-  Mail,
-  Smartphone,
-  ExternalLink,
-  ArrowRight,
-  Info
+  CheckCircle2, 
+  TrendingUp,
+  ArrowRightCircle
 } from 'lucide-react';
 
 export default function ReferralView() {
-  const staff = [
-    { name: 'Sarah Jenkins', role: 'Marketing Lead', code: 'SRH-MED-2024', referrals: 142, conversion: '12.4%', status: 'Top Performer', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah' },
-    { name: 'Michael Chen', role: 'Sales Specialist', code: 'MCHEN-GROW-88', referrals: 89, conversion: '8.2%', status: 'Active', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Michael' },
-    { name: 'Elena Rodriguez', role: 'Partner Manager', code: 'ELN-OPS-101', referrals: 45, conversion: '5.1%', status: 'Active', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Elena' },
+  const topCodes = [
+    { code: 'SABID20', description: 'keranigan-1', uses: 2, status: 'Active' },
+    { code: 'MEDI2026', description: '-', uses: 1, status: 'Active' },
+    { code: 'BIBAK25', description: 'keranigan-2', uses: 0, status: 'Active' },
   ];
 
-  const recentRegistrations = [
-    { user: 'City Hospital South', date: '2h ago', staffName: 'Sarah Jenkins', type: 'Enterprise' },
-    { user: 'Global Health Inc', date: '5h ago', staffName: 'Michael Chen', type: 'Pro' },
-    { user: 'Neighborhood Clinic', date: '1d ago', staffName: 'Sarah Jenkins', type: 'Basic' },
+  const recentReferrals = [
+    { customer: 'bristy pharmacy', phone: '01734142511', code: 'MEDI2026', date: '25 Apr 2026' },
+    { customer: 'sikder pharmacy', phone: '01719984699', code: 'SABID20', date: '23 Apr 2026' },
+    { customer: 'ashian model pharmacy', phone: '01314014239', code: 'SABID20', date: '06 Nov 2025' },
   ];
 
   return (
-    <div className="space-y-8 pb-12">
-      {/* Simple Header */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 animate-in fade-in slide-in-from-top-4 duration-500">
-        <div>
-          <h1 className="text-3xl font-display font-bold text-white tracking-tight">Marketing & Referrals</h1>
-          <p className="text-zinc-500 font-medium tracking-tight mt-1 text-base">Track how staff members are bringing in new users using their unique codes.</p>
-        </div>
-        <div className="flex gap-3">
-           <button className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-white text-black font-bold text-[10px] uppercase tracking-widest hover:bg-zinc-200 transition-all shadow-xl active:scale-95 group">
-              <UserPlus size={16} />
-              <span>Add New Staff</span>
-           </button>
+    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+      {/* Header & Breadcrumbs */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <h2 className="text-xl font-display font-medium text-white/60 tracking-tight">
+          WELCOME !! <span className="text-brand font-bold uppercase tracking-widest">RISHU SADMIN</span>
+        </h2>
+        <div className="flex items-center gap-2 text-xs text-zinc-500 font-medium">
+          <span>Home</span>
+          <ChevronRight size={12} />
+          <span>editor</span>
+          <ChevronRight size={12} />
+          <span>referral</span>
+          <ChevronRight size={12} />
+          <span className="text-zinc-300">dashboard</span>
         </div>
       </div>
 
-      {/* Clear KPI Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {/* Top Stat Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { label: 'Total Registrations', val: '1,240', change: '+14%', color: 'text-brand', icon: Users, tip: 'Total users joined via referral' },
-          { label: 'Marketing Staff', val: '24', change: 'Live', color: 'text-emerald-500', icon: Award, tip: 'Staff currently using referral codes' },
-          { label: 'Referral Revenue', val: '$84,200', change: '+$12k', color: 'text-indigo-400', icon: TrendingUp, tip: 'Revenue generated from referred users' },
-          { label: 'Conversion Rate', val: '8.4%', change: '-2%', color: 'text-rose-400', icon: Share2, tip: 'Percentage of invites that become users' },
-        ].map((s, i) => (
-          <div 
+          { label: 'Total Codes', value: '342', bg: 'from-brand/10 to-brand/5', icon: Share2, trend: '+12%', color: 'text-brand' },
+          { label: 'Active Codes', value: '28', bg: 'from-success/10 to-success/5', icon: CheckCircle2, trend: '+4%', color: 'text-success' },
+          { label: 'Total Referrals', value: '1,280', bg: 'from-warning/10 to-warning/5', icon: Users, trend: '+18%', color: 'text-warning' },
+          { label: 'Conversion Rate', value: '14.2%', bg: 'from-danger/10 to-danger/5', icon: TrendingUp, trend: '+2.1%', color: 'text-danger' },
+        ].map((item, i) => (
+          <motion.div 
             key={i} 
-            className="glass-panel p-5 rounded-2xl relative group hover:border-brand/40 transition-all duration-300"
+            whileHover={{ y: -4 }}
+            className={`modern-card bg-gradient-to-br ${item.bg} relative overflow-hidden group`}
           >
-            <div className="flex justify-between items-start mb-4">
-               <div className={`p-2.5 rounded-xl bg-zinc-900 border border-border-subtle ${s.color}`}>
-                  <s.icon size={20} />
-               </div>
-               <div className={`text-[10px] font-bold px-2 py-1 rounded-lg uppercase tracking-wider ${s.change.startsWith('+') ? 'bg-emerald-500/10 text-emerald-500' : s.change === 'Live' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-rose-500/10 text-rose-500'}`}>
-                  {s.change}
-               </div>
-            </div>
-            <div>
-               <div className="flex items-center gap-1.5 mb-1">
-                  <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">{s.label}</p>
-                  <div className="group/tip relative">
-                    <Info size={12} className="text-zinc-700 cursor-help" />
-                    <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-48 p-2 bg-zinc-900 border border-zinc-800 rounded-lg text-[9px] text-zinc-400 font-medium invisible group-hover/tip:visible z-50 shadow-2xl">
-                       {s.tip}
-                    </div>
+            <div className="relative z-10 flex flex-col h-full justify-between">
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <div className={`p-2 rounded-xl bg-surface-raised border border-white/5 ${item.color}`}>
+                    <item.icon size={20} />
                   </div>
-               </div>
-               <h3 className="text-2xl font-display font-bold text-white tracking-tight">{s.val}</h3>
+                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full bg-surface-raised border border-white/5 ${item.color}`}>
+                    {item.trend}
+                  </span>
+                </div>
+                <p className="text-3xl font-display font-bold text-white mb-1">{item.value}</p>
+                <p className="text-xs font-medium text-zinc-500 uppercase tracking-widest">{item.label}</p>
+              </div>
             </div>
-          </div>
+            
+            {/* Background Accent */}
+            <div className={`absolute -right-4 -bottom-4 opacity-[0.03] group-hover:opacity-[0.08] transition-opacity duration-700 ${item.color}`}>
+              <item.icon size={120} />
+            </div>
+          </motion.div>
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-        {/* Simplified Staff Table */}
-        <div className="lg:col-span-3 glass-panel rounded-3xl overflow-hidden flex flex-col shadow-2xl border-zinc-800/50">
-           <div className="p-6 border-b border-border-subtle flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
-                 <Award size={18} className="text-brand" />
-                 <h2 className="text-sm font-bold text-white uppercase tracking-widest">Active Marketing Staff</h2>
-              </div>
-              <div className="relative flex-1 max-w-sm">
-                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600" size={14} />
-                 <input 
-                    type="text" 
-                    placeholder="Search staff name or code..." 
-                    className="w-full pl-9 pr-4 py-2 bg-zinc-950 border border-zinc-800 focus:border-brand/40 rounded-xl text-xs text-white outline-none transition-all" 
-                 />
-              </div>
-           </div>
-           <div className="overflow-x-auto">
-              <table className="w-full">
-                 <thead>
-                    <tr className="bg-zinc-950/50">
-                       <th className="px-6 py-4 text-left text-[10px] font-bold text-zinc-600 uppercase tracking-widest">Staff Member</th>
-                       <th className="px-6 py-4 text-left text-[10px] font-bold text-zinc-600 uppercase tracking-widest">Referral Code</th>
-                       <th className="px-6 py-4 text-left text-[10px] font-bold text-zinc-600 uppercase tracking-widest">Successful Referrals</th>
-                       <th className="px-6 py-4 text-left text-[10px] font-bold text-zinc-600 uppercase tracking-widest">Success Rate</th>
-                       <th className="px-6 py-4 text-right text-[10px] font-bold text-zinc-600 uppercase tracking-widest">Action</th>
-                    </tr>
-                 </thead>
-                 <tbody className="divide-y divide-zinc-800/30 text-xs text-white outline-none transition-all">
-                    {staff.map((member, i) => (
-                       <tr key={i} className="group hover:bg-zinc-900/40 transition-all duration-200">
-                          <td className="px-6 py-5">
-                             <div className="flex items-center gap-3">
-                                <img src={member.avatar} className="w-9 h-9 rounded-xl bg-zinc-800 border border-border-subtle" alt="" />
-                                <div>
-                                   <p className="font-bold text-white mb-0.5">{member.name}</p>
-                                   <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">{member.role}</p>
-                                </div>
-                             </div>
-                          </td>
-                          <td className="px-6 py-5">
-                             <div className="flex items-center gap-2 px-2.5 py-1.5 bg-zinc-950 border border-zinc-800/50 w-fit rounded-lg group/code cursor-pointer hover:border-brand/40 transition-all">
-                                <span className="font-mono font-bold text-brand uppercase">{member.code}</span>
-                                <Copy size={12} className="text-zinc-700 group-hover/code:text-brand transition-colors" />
-                             </div>
-                          </td>
-                          <td className="px-6 py-5">
-                            <span className="text-base font-display font-bold text-zinc-200">{member.referrals}</span>
-                          </td>
-                          <td className="px-6 py-5">
-                             <div className="flex flex-col gap-1.5">
-                                <div className="flex justify-between items-center text-[10px] font-bold mb-1">
-                                   <span className="text-white">{member.conversion}</span>
-                                </div>
-                                <div className="w-20 h-1 bg-zinc-800 rounded-full overflow-hidden">
-                                   <div className="h-full bg-emerald-500" style={{ width: member.conversion }} />
-                                </div>
-                             </div>
-                          </td>
-                          <td className="px-6 py-5 text-right">
-                             <button className="p-2 text-zinc-500 hover:text-white transition-all bg-zinc-950 border border-zinc-800/50 rounded-xl">
-                                <MoreHorizontal size={14} />
-                             </button>
-                          </td>
-                       </tr>
-                    ))}
-                 </tbody>
-              </table>
-           </div>
+      {/* Tables Section */}
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+        {/* Top Performing Codes Table */}
+        <div className="modern-card p-0 overflow-hidden flex flex-col">
+          <div className="px-6 py-5 border-b border-white/[0.03] flex items-center justify-between">
+             <div className="flex items-center gap-3">
+               <div className="w-1.5 h-1.5 rounded-full bg-brand shadow-[0_0_10px_rgba(99,102,241,0.5)]" />
+               <h3 className="text-sm font-bold text-white uppercase tracking-widest">Top Performing Codes</h3>
+             </div>
+             <button className="text-[10px] font-bold text-zinc-500 hover:text-white transition-colors uppercase tracking-widest px-3 py-1 rounded-full border border-white/5 bg-white/5">
+               View All
+             </button>
+          </div>
+          <div className="overflow-x-auto flex-1">
+            <table className="w-full text-left">
+              <thead>
+                <tr className="border-b border-white/[0.02] bg-white/[0.01]">
+                  <th className="px-6 py-4 text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Campaign Code</th>
+                  <th className="px-6 py-4 text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Target Node</th>
+                  <th className="px-6 py-4 text-[10px] font-bold text-zinc-500 uppercase tracking-widest text-right">Reach</th>
+                  <th className="px-6 py-4 text-[10px] font-bold text-zinc-500 uppercase tracking-widest text-right">Status</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-white/[0.02]">
+                {topCodes.map((row, i) => (
+                  <tr key={i} className="group hover:bg-white/[0.02] transition-colors">
+                    <td className="px-6 py-4">
+                      <code className="text-zinc-300 font-mono text-[11px] bg-zinc-800/50 px-2 py-1 rounded border border-white/5 ring-1 ring-brand/20">
+                        {row.code}
+                      </code>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex flex-col">
+                        <span className="text-xs text-white font-medium">{row.description}</span>
+                        <span className="text-[10px] text-zinc-600">ID: NODE-0422</span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <span className="text-xs font-bold text-white">{row.uses}</span>
+                        <div className="w-12 h-1 bg-zinc-800 rounded-full overflow-hidden">
+                           <div className="h-full bg-brand rounded-full" style={{ width: `${(row.uses/5)*100}%` }} />
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-right">
+                      <span className="inline-flex items-center gap-1.5 text-[9px] font-bold text-success px-2 py-0.5 rounded-full border border-success/20 bg-success/5 uppercase tracking-widest">
+                        <span className="w-1 h-1 rounded-full bg-success animate-pulse" />
+                        {row.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
 
-        {/* Simplified Recent Feed */}
-        <div className="lg:col-span-1 space-y-6">
-           <div className="glass-panel p-6 rounded-3xl flex flex-col shadow-xl border-zinc-800/50 h-full">
-              <div className="flex items-center gap-3 mb-6">
-                 <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-500">
-                    <Gift size={16} />
-                 </div>
-                 <h3 className="text-xs font-bold text-white uppercase tracking-widest">Recent Sign-ups</h3>
-              </div>
-              
-              <div className="space-y-4 flex-1">
-                 {recentRegistrations.map((reg, i) => (
-                    <div key={i} className="flex flex-col gap-2 p-4 rounded-2xl bg-zinc-950 border border-zinc-800/50 group hover:border-brand/30 transition-all duration-300">
-                       <div className="flex justify-between items-start">
-                          <div>
-                             <p className="text-sm font-bold text-white mb-0.5">{reg.user}</p>
-                             <p className="text-[9px] text-zinc-600 font-bold uppercase tracking-wider">{reg.date}</p>
-                          </div>
-                          <span className="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-[8px] font-bold text-zinc-500 uppercase">{reg.type}</span>
-                       </div>
-                       <div className="mt-2 pt-2 border-t border-zinc-800/50">
-                          <p className="text-[10px] text-zinc-500 font-medium">Referred by: <span className="text-brand font-bold">{reg.staffName}</span></p>
-                       </div>
-                    </div>
-                 ))}
-              </div>
-              
-              <button className="mt-6 w-full py-3 bg-zinc-950 hover:bg-zinc-900 border border-zinc-800 rounded-2xl text-[10px] font-bold text-zinc-500 hover:text-white uppercase tracking-widest transition-all text-center">
-                 View All History
-              </button>
-           </div>
+        {/* Recent Referrals Table */}
+        <div className="modern-card p-0 overflow-hidden flex flex-col">
+          <div className="px-6 py-5 border-b border-white/[0.03] flex items-center justify-between">
+             <div className="flex items-center gap-3">
+               <div className="w-1.5 h-1.5 rounded-full bg-warning shadow-[0_0_10px_rgba(245,158,11,0.5)]" />
+               <h3 className="text-sm font-bold text-white uppercase tracking-widest">Real-time Stream</h3>
+             </div>
+             <div className="flex items-center gap-2">
+                <span className="flex h-2 w-2 relative">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-success"></span>
+                </span>
+                <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Live</span>
+             </div>
+          </div>
+          <div className="overflow-x-auto flex-1">
+            <table className="w-full text-left">
+              <thead>
+                <tr className="border-b border-white/[0.02] bg-white/[0.01]">
+                  <th className="px-6 py-4 text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Entity</th>
+                  <th className="px-6 py-4 text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Contact</th>
+                  <th className="px-6 py-4 text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Channel</th>
+                  <th className="px-6 py-4 text-[10px] font-bold text-zinc-500 uppercase tracking-widest text-right">Timestamp</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-white/[0.02]">
+                {recentReferrals.map((row, i) => (
+                  <tr key={i} className="group hover:bg-white/[0.02] transition-colors">
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-lg bg-surface-raised border border-white/5 flex items-center justify-center text-[10px] font-bold text-brand ring-1 ring-white/5">
+                          {row.customer.substring(0, 1).toUpperCase()}
+                        </div>
+                        <span className="text-xs text-white font-medium capitalize">{row.customer}</span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-xs text-zinc-500 font-mono tracking-tighter italic">{row.phone}</td>
+                    <td className="px-6 py-4">
+                      <span className="text-[10px] font-bold text-brand px-2 py-0.5 rounded border border-brand/20 bg-brand/5 tracking-widest uppercase">
+                        {row.code}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-right text-[10px] text-zinc-600 font-medium">{row.date}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
-
-      {/* Helpful Actions Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-         <div className="glass-panel p-6 rounded-3xl bg-brand/5 border border-brand/20 flex flex-col justify-between">
-            <div>
-               <h4 className="text-lg font-display font-bold text-white mb-2">Campaign Quick Link</h4>
-               <p className="text-sm text-zinc-500 leading-relaxed mb-4">Share this link directly with potential marketing partners to get them started.</p>
-            </div>
-            <div className="flex items-center gap-3 p-3 bg-zinc-950 border border-zinc-800 rounded-xl">
-               <p className="text-[10px] font-mono text-zinc-500 truncate flex-1">medifast.io/grow/invite/...</p>
-               <button className="p-2 bg-zinc-900 text-brand rounded-lg hover:bg-brand hover:text-white transition-all">
-                  <Copy size={14} />
-               </button>
-            </div>
-         </div>
-
-         <div className="glass-panel p-6 rounded-3xl border-zinc-800/50 flex flex-col justify-between group">
-            <div>
-               <h4 className="text-lg font-display font-bold text-white mb-2">Issue New Referral Code</h4>
-               <p className="text-sm text-zinc-500 leading-relaxed mb-4">Generate a trackable registration code for an existing employee or partner.</p>
-            </div>
-            <button className="w-full py-3 bg-brand text-white text-[10px] font-bold uppercase tracking-widest rounded-xl hover:brightness-110 shadow-lg shadow-brand/20 transition-all">
-               Generate Trackable Code
-            </button>
-         </div>
       </div>
     </div>
   );

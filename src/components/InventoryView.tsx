@@ -36,98 +36,101 @@ export default function InventoryView() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 px-2">
         <div>
-          <h1 className="text-2xl font-display font-bold text-white tracking-tight">Inventory</h1>
-          <p className="text-zinc-500 font-medium tracking-tight text-sm">Manage medical stock, expiry, and reordering.</p>
+          <h1 className="text-2xl font-display font-bold text-white tracking-tight flex items-center gap-3">
+            Inventory Console
+            <span className="px-2 py-0.5 rounded bg-brand/10 text-brand text-[9px] font-bold uppercase tracking-widest border border-brand/20">Active</span>
+          </h1>
+          <p className="text-zinc-600 font-bold uppercase tracking-widest text-[10px] mt-2">Enterprise Resource Management</p>
         </div>
-        <div className="flex gap-3">
-           <button className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 rounded-xl border border-border-subtle text-zinc-400 font-bold text-xs uppercase tracking-widest bg-zinc-900 hover:bg-zinc-800 transition-all font-medium">
-              <Scan size={16} className="text-zinc-500" />
-              <span>Scan QR</span>
+        <div className="flex gap-4">
+           <button className="px-6 py-3 rounded-2xl border border-white/[0.05] text-zinc-500 font-bold text-[10px] uppercase tracking-widest bg-zinc-950/50 hover:bg-zinc-900 hover:text-white transition-all flex items-center gap-2">
+              <Scan size={14} />
+              Scan Payload
            </button>
-           <button className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-white text-black font-bold text-xs uppercase tracking-widest hover:bg-zinc-200 active:scale-[0.98] transition-all font-medium">
-              <Plus size={16} />
-              <span>Add Item</span>
+           <button className="px-8 py-3 rounded-2xl bg-white text-black font-bold text-[10px] uppercase tracking-widest hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-2 shadow-[0_20px_40px_rgba(255,255,255,0.1)]">
+              <Plus size={14} />
+              Provision Asset
            </button>
         </div>
       </div>
 
       {/* Top Banner Cards */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="bg-rose-600 p-6 rounded-3xl text-white relative overflow-hidden group shadow-xl shadow-rose-600/10">
-           <div className="absolute right-0 top-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 blur-2xl group-hover:scale-150 transition-transform duration-700" />
-           <div className="relative z-10 flex flex-col h-full">
-              <h3 className="text-xs font-bold mb-4 tracking-[0.2em] uppercase opacity-80 font-mono">Stock Integrity</h3>
+        <div className="modern-card p-0 bg-rose-600 border-none relative overflow-hidden group">
+           <div className="absolute right-0 top-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 blur-2xl group-hover:scale-150 transition-all duration-700" />
+           <div className="p-8 relative z-10 flex flex-col h-full">
+              <h3 className="text-[10px] font-bold mb-6 tracking-[0.2em] uppercase text-white/50">Stock Integrity</h3>
               <div className="flex items-center gap-8 flex-1">
-                 <div className="space-y-2">
-                    <div className="flex items-center gap-2">
-                       <div className="w-1.5 h-1.5 rounded-full bg-white" />
-                       <span className="text-[9px] font-bold uppercase tracking-widest opacity-60">In stock</span>
-                       <span className="text-base font-display font-bold ml-auto">8,432</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                       <div className="w-1.5 h-1.5 rounded-full bg-rose-300" />
-                       <span className="text-[9px] font-bold uppercase tracking-widest opacity-60">Low stock</span>
-                       <span className="text-base font-display font-bold ml-auto">412</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                       <div className="w-1.5 h-1.5 rounded-full bg-rose-900" />
-                       <span className="text-[9px] font-bold uppercase tracking-widest opacity-60">Out stock</span>
-                       <span className="text-base font-display font-bold ml-auto">84</span>
-                    </div>
+                 <div className="space-y-3">
+                    {[
+                      { label: 'Optimal', value: '8,432', color: 'bg-white' },
+                      { label: 'Critical', value: '412', color: 'bg-rose-300' },
+                      { label: 'Depleted', value: '84', color: 'bg-rose-900' }
+                    ].map((s, i) => (
+                      <div key={i} className="flex items-center gap-3">
+                        <div className={`w-1.5 h-1.5 rounded-full ${s.color}`} />
+                        <span className="text-[9px] font-bold uppercase tracking-widest text-white/40">{s.label}</span>
+                        <span className="text-lg font-display font-bold text-white ml-auto leading-none">{s.value}</span>
+                      </div>
+                    ))}
                  </div>
-                 <div className="relative w-20 h-20 flex items-center justify-center">
+                 <div className="relative w-24 h-24 flex items-center justify-center ml-auto">
                     <svg className="w-full h-full -rotate-90">
-                       <circle cx="40" cy="40" r="34" fill="transparent" stroke="white" strokeWidth="5" strokeOpacity="0.1" />
+                       <circle cx="48" cy="48" r="42" fill="transparent" stroke="white" strokeWidth="6" strokeOpacity="0.1" />
                        <circle 
-                          cx="40" cy="40" r="34" fill="transparent" stroke="white" strokeWidth="5" 
-                          strokeDasharray={2 * Math.PI * 34} 
-                          strokeDashoffset={(2 * Math.PI * 34) * (1 - 0.92)} 
+                          cx="48" cy="48" r="42" fill="transparent" stroke="white" strokeWidth="6" 
+                          strokeDasharray={2 * Math.PI * 42} 
+                          strokeDashoffset={(2 * Math.PI * 42) * (1 - 0.92)} 
                           strokeLinecap="round"
+                          className="drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]"
                        />
                     </svg>
-                    <div className="absolute font-display font-bold text-lg uppercase">92%</div>
+                    <div className="absolute font-display font-bold text-xl text-white">92%</div>
                  </div>
               </div>
            </div>
         </div>
 
-        <div className="bg-indigo-600 p-6 rounded-3xl text-white relative overflow-hidden group shadow-xl shadow-indigo-600/10">
-           <div className="absolute right-0 top-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 blur-2xl group-hover:scale-150 transition-transform duration-700" />
-           <div className="relative z-10 h-full flex flex-col">
-              <h3 className="text-xs font-bold mb-4 tracking-[0.2em] uppercase opacity-80 font-mono">Supply Logistics</h3>
+        <div className="modern-card p-0 bg-brand border-none relative overflow-hidden group">
+           <div className="absolute right-0 top-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 blur-2xl group-hover:scale-150 transition-all duration-700" />
+           <div className="p-8 relative z-10 h-full flex flex-col">
+              <h3 className="text-[10px] font-bold mb-6 tracking-[0.2em] uppercase text-white/50">Supply Logistics</h3>
               <div className="flex gap-4 items-end flex-1">
                  {[
-                    { label: 'Inbound', val: 1240, h: 'h-24', color: 'bg-white/20' },
-                    { label: 'Outbound', val: 3850, h: 'h-32', color: 'bg-white/40' },
-                    { label: 'Adjusted', val: 42, h: 'h-12', color: 'bg-white/10' },
+                    { label: 'Inbound', val: 1240, h: 'h-24', color: 'bg-white/10' },
+                    { label: 'Transit', val: 3850, h: 'h-32', color: 'bg-white/30' },
+                    { label: 'Voided', val: 42, h: 'h-12', color: 'bg-white/5' },
                  ].map((bar, i) => (
-                    <div key={i} className="flex-1 flex flex-col items-center gap-2 group/bar">
-                       <span className="text-[10px] font-bold uppercase opacity-60 tracking-wider font-display font-mono">{bar.label}</span>
-                       <div className={`w-full ${bar.h} ${bar.color} rounded-xl group-hover/bar:bg-white/60 transition-colors duration-300`} />
-                       <span className="text-xs font-bold font-mono">{bar.val.toLocaleString()}</span>
+                    <div key={i} className="flex-1 flex flex-col items-center gap-3">
+                       <span className="text-[8px] font-bold uppercase text-white/40 tracking-[0.2em]">{bar.label}</span>
+                       <div className={`w-full ${bar.h} ${bar.color} rounded-2xl hover:bg-white/50 transition-colors duration-500`} />
+                       <span className="text-[10px] font-bold text-white font-display uppercase tracking-widest">{bar.val.toLocaleString()}</span>
                     </div>
                  ))}
               </div>
            </div>
         </div>
 
-        <div className="bg-zinc-900 border border-border-subtle p-8 rounded-[2.5rem] text-white relative overflow-hidden group shadow-xl">
-            <div className="relative z-10 flex flex-col h-full">
-              <h3 className="text-lg font-bold mb-6 tracking-tight uppercase text-xs tracking-widest opacity-80">Critical Attention</h3>
-              <div className="bg-zinc-800/50 border border-border-subtle p-4 rounded-2xl flex items-center gap-4 group-hover:bg-zinc-800 transition-colors duration-500">
-                 <div className="w-14 h-14 bg-zinc-900 border border-border-subtle rounded-xl flex items-center justify-center shrink-0 text-zinc-500">
-                    <Package size={28} />
+        <div className="modern-card border border-white/[0.05] p-8 flex flex-col justify-between relative overflow-hidden group">
+            <div className="absolute top-0 right-0 p-8 opacity-[0.02] text-zinc-500 group-hover:scale-110 transition-transform duration-1000">
+               <Package size={140} />
+            </div>
+            <div className="relative z-10">
+              <h3 className="text-[10px] font-bold mb-8 tracking-[0.2em] uppercase text-zinc-600">Critical Priority</h3>
+              <div className="modern-card p-4 flex items-center gap-4 bg-zinc-950/50 hover:border-brand/40 transition-colors duration-500 border border-white/[0.03]">
+                 <div className="w-14 h-14 bg-zinc-950 rounded-2xl flex items-center justify-center shrink-0 text-zinc-700 border border-white/5">
+                    <Package size={24} />
                  </div>
-                 <div className="flex-1 overflow-hidden">
-                    <div className="flex items-center gap-2 mb-1">
-                       <span className="text-[8px] bg-rose-500 text-white font-bold px-1.5 py-0.5 rounded-sm uppercase tracking-widest">Priority</span>
+                 <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1.5">
+                       <span className="text-[8px] bg-rose-500 text-white font-bold px-2 py-0.5 rounded-sm uppercase tracking-widest leading-none">Scarcity Alert</span>
                     </div>
-                    <h4 className="font-bold text-sm truncate">Insulin Syringes</h4>
-                    <p className="text-[10px] text-zinc-500 uppercase tracking-widest mt-0.5">12 boxes remaining</p>
+                    <h4 className="font-bold text-sm text-white truncate">Insulin Syringes Pro</h4>
+                    <p className="text-[10px] text-zinc-600 uppercase tracking-widest mt-1">12 units remain</p>
                  </div>
-                 <button className="w-9 h-9 rounded-lg bg-white text-black flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-all">
+                 <button className="w-10 h-10 rounded-xl bg-white text-black flex items-center justify-center hover:bg-brand hover:text-white transition-all">
                     <ArrowUpRight size={18} />
                  </button>
               </div>
@@ -136,59 +139,57 @@ export default function InventoryView() {
       </div>
 
       {/* Main Content Area */}
-      <div className="glass-panel rounded-[2.5rem] overflow-hidden flex flex-col shadow-2xl">
+      <div className="modern-card p-0 overflow-hidden flex flex-col border border-white/[0.03]">
         {/* Table Filters */}
-        <div className="p-8 border-b border-border-subtle space-y-6">
-           <div className="flex flex-wrap items-center justify-between gap-4">
-              <div className="flex bg-zinc-900 p-1 rounded-xl">
-                 {['Catalog', 'Expiry', 'Orders', 'Adjustments'].map((tab) => (
-                    <button key={tab} className={`px-6 py-2 text-[10px] font-bold rounded-lg transition-all uppercase tracking-widest ${tab === 'Catalog' ? 'bg-zinc-800 text-white shadow-sm' : 'text-zinc-500 hover:text-zinc-300'}`}>
+        <div className="p-8 space-y-8 bg-white/[0.01]">
+           <div className="flex flex-wrap items-center justify-between gap-6">
+              <div className="flex bg-zinc-950/80 p-1 rounded-2xl border border-white/5 backdrop-blur-md">
+                 {['Catalog', 'Expiry', 'Orders', 'Delta'].map((tab) => (
+                    <button key={tab} className={`px-6 py-2.5 text-[10px] font-bold rounded-xl transition-all uppercase tracking-widest ${tab === 'Catalog' ? 'bg-zinc-900 text-white shadow-lg border border-white/5' : 'text-zinc-600 hover:text-zinc-400'}`}>
                        {tab}
                     </button>
                  ))}
               </div>
-              <div className="flex items-center gap-3">
-                 <div className="flex bg-zinc-900 p-1 rounded-xl">
-                    <button onClick={() => setViewMode('grid')} className={`p-2 rounded-lg ${viewMode === 'grid' ? 'bg-zinc-800 shadow-sm text-brand' : 'text-zinc-600'}`}><Grid size={18} /></button>
-                    <button onClick={() => setViewMode('list')} className={`p-2 rounded-lg ${viewMode === 'list' ? 'bg-zinc-800 shadow-sm text-brand' : 'text-zinc-600'}`}><ListIcon size={18} /></button>
+              <div className="flex items-center gap-4">
+                 <div className="flex bg-zinc-950/80 p-1 rounded-2xl border border-white/5">
+                    <button onClick={() => setViewMode('grid')} className={`p-2.5 rounded-xl transition-all ${viewMode === 'grid' ? 'bg-zinc-900 text-brand shadow-lg border border-white/5' : 'text-zinc-700 hover:text-zinc-500'}`}><Grid size={18} /></button>
+                    <button onClick={() => setViewMode('list')} className={`p-2.5 rounded-xl transition-all ${viewMode === 'list' ? 'bg-zinc-900 text-brand shadow-lg border border-white/5' : 'text-zinc-700 hover:text-zinc-500'}`}><ListIcon size={18} /></button>
                  </div>
-                 <button className="flex items-center gap-2 px-4 py-2 bg-zinc-900 border border-border-subtle rounded-xl text-[10px] font-bold uppercase tracking-widest text-zinc-500 hover:text-white transition-all">
-                    <Download size={16} />
-                    <span>Export</span>
+                 <button className="px-5 py-3 bg-zinc-950/80 border border-white/5 rounded-2xl text-[10px] font-bold uppercase tracking-widest text-zinc-600 hover:text-white hover:bg-zinc-900 transition-all flex items-center gap-2">
+                    <Download size={14} />
+                    Export XL
                  </button>
               </div>
            </div>
 
            <div className="flex flex-wrap items-center gap-4">
-              <div className="flex-1 relative min-w-[300px]">
-                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500" size={18} />
-                 <input type="text" placeholder="Search SKU, NDC/GTIN, or product name..." className="w-full pl-12 pr-4 py-3 bg-zinc-900 border border-transparent focus:border-border-subtle rounded-2xl text-sm text-white placeholder:text-zinc-600 focus:ring-4 focus:ring-brand/5 outline-none transition-all" />
+              <div className="flex-1 relative min-w-[300px] group">
+                 <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-700 group-hover:text-brand transition-colors" size={16} />
+                 <input type="text" placeholder="SKU, NDC/GTIN, or Product ID..." className="w-full pl-14 pr-4 py-4 bg-zinc-950/50 border border-white/5 focus:border-brand/40 rounded-3xl text-sm text-white placeholder:text-zinc-700 outline-none transition-all font-medium" />
               </div>
-              <select className="px-4 py-3 bg-zinc-900 border border-transparent rounded-2xl text-[10px] uppercase tracking-widest font-bold text-zinc-500 outline-none focus:border-border-subtle transition-all cursor-pointer">
-                 <option>Category</option>
-              </select>
-              <select className="px-4 py-3 bg-zinc-900 border border-transparent rounded-2xl text-[10px] uppercase tracking-widest font-bold text-zinc-500 outline-none focus:border-border-subtle transition-all cursor-pointer">
-                 <option>Manufacturer</option>
-              </select>
-              <select className="px-4 py-3 bg-zinc-900 border border-transparent rounded-2xl text-[10px] uppercase tracking-widest font-bold text-zinc-500 outline-none focus:border-border-subtle transition-all cursor-pointer">
-                 <option>Stock Level</option>
-              </select>
+              <div className="flex items-center gap-3">
+                {['Category', 'Stock Tier', 'Hub'].map(label => (
+                  <select key={label} className="px-5 py-4 bg-zinc-950/50 border border-white/5 rounded-3xl text-[10px] uppercase font-bold text-zinc-600 outline-none focus:border-brand/40 transition-all cursor-pointer hover:bg-zinc-900">
+                    <option>{label}</option>
+                  </select>
+                ))}
+              </div>
            </div>
         </div>
 
         {/* Table Content */}
         {viewMode === 'list' ? (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
+          <div className="overflow-x-auto px-2">
+            <table className="w-full text-left">
               <thead>
-                <tr className="border-b border-border-subtle">
-                  <th className="p-6 pb-4"><input type="checkbox" className="rounded border-zinc-700 bg-zinc-800 text-brand focus:ring-brand" /></th>
-                  <th className="p-6 pb-4 text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Product & SKU</th>
-                  <th className="p-6 pb-4 text-[10px] font-bold text-zinc-500 uppercase tracking-widest">NDC / GTIN</th>
-                  <th className="p-6 pb-4 text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Category</th>
-                  <th className="p-6 pb-4 text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Cost / Tier</th>
-                  <th className="p-6 pb-4 text-[10px] font-bold text-zinc-500 uppercase tracking-widest text-center">On Hand</th>
-                  <th className="p-6 pb-4 text-[10px] font-bold text-zinc-500 uppercase tracking-widest text-right">Status</th>
+                <tr className="border-b border-white/[0.03]">
+                  <th className="p-6 py-4"><input type="checkbox" className="rounded-md border-zinc-800 bg-zinc-950 text-brand focus:ring-brand" /></th>
+                  <th className="p-6 py-4 text-[10px] font-bold text-zinc-600 uppercase tracking-[0.2em]">Asset Identity</th>
+                  <th className="p-6 py-4 text-[10px] font-bold text-zinc-600 uppercase tracking-[0.2em]">Regulatory Code</th>
+                  <th className="p-6 py-4 text-[10px] font-bold text-zinc-600 uppercase tracking-[0.2em]">Classification</th>
+                  <th className="p-6 py-4 text-[10px] font-bold text-zinc-600 uppercase tracking-[0.2em]">Valuation</th>
+                  <th className="p-6 py-4 text-[10px] font-bold text-zinc-600 uppercase tracking-[0.2em] text-center">Availability</th>
+                  <th className="p-6 py-4 text-[10px] font-bold text-zinc-600 uppercase tracking-[0.2em] text-right">Integrity</th>
                 </tr>
               </thead>
               <tbody>
@@ -197,44 +198,46 @@ export default function InventoryView() {
                     key={item.id} 
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="group border-b border-zinc-900/50 hover:bg-zinc-800/20 transition-colors cursor-pointer"
+                    className="group border-b border-white/[0.01] hover:bg-white/[0.02] transition-colors cursor-pointer"
                   >
-                    <td className="p-6 py-5"><input type="checkbox" className="rounded border-zinc-700 bg-zinc-800 text-brand focus:ring-brand" /></td>
+                    <td className="p-6 py-5"><input type="checkbox" className="rounded-md border-zinc-800 bg-zinc-950 text-brand focus:ring-brand" /></td>
                     <td className="p-6 py-5">
-                      <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 bg-zinc-900 border border-border-subtle rounded-xl flex items-center justify-center shrink-0 text-zinc-600 group-hover:border-brand/40 group-hover:text-brand transition-all">
-                           <Package size={24} />
+                      <div className="flex items-center gap-5">
+                        <div className="w-12 h-12 bg-zinc-950 border border-white/5 rounded-2xl flex items-center justify-center shrink-0 text-zinc-700 group-hover:border-brand/40 group-hover:text-brand transition-all">
+                           <Package size={20} />
                         </div>
                         <div>
-                          <p className="text-sm font-bold text-white tracking-tight">{item.name}</p>
-                          <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest mt-0.5">SKU: {item.sku} • {item.manufacturer}</p>
+                          <p className="text-sm font-bold text-zinc-200 group-hover:text-white transition-colors">{item.name}</p>
+                          <p className="text-[10px] text-zinc-600 font-bold uppercase tracking-widest mt-1">Ref: {item.sku}</p>
                         </div>
                       </div>
                     </td>
-                    <td className="p-6 py-5 text-xs font-mono font-medium text-zinc-500">{item.ndc}</td>
                     <td className="p-6 py-5">
-                       <span className="px-2 py-1 bg-zinc-900 border border-border-subtle text-zinc-400 rounded-lg text-[9px] font-bold uppercase tracking-widest">{item.category}</span>
+                       <span className="text-xs font-mono font-bold text-zinc-700 group-hover:text-zinc-500 transition-colors uppercase">{item.ndc}</span>
                     </td>
                     <td className="p-6 py-5">
-                       <p className="text-sm font-bold text-white">{item.cost}</p>
-                       <p className="text-[9px] text-zinc-600 font-bold uppercase tracking-wider">Tier 1</p>
+                       <span className="px-3 py-1 bg-zinc-950 border border-white/5 text-zinc-600 rounded-xl text-[9px] font-bold uppercase tracking-widest group-hover:text-zinc-400 transition-colors">{item.category}</span>
+                    </td>
+                    <td className="p-6 py-5">
+                       <p className="text-sm font-bold text-zinc-300">{item.cost}</p>
+                       <p className="text-[9px] text-zinc-700 font-bold uppercase tracking-widest mt-1">Tier Delta</p>
                     </td>
                     <td className="p-6 py-5 text-center">
-                       <p className="text-sm font-display font-bold text-white">{item.onHand.toLocaleString()}</p>
-                       <p className="text-[9px] text-zinc-600 font-bold tracking-widest uppercase">Central Hub</p>
+                       <p className="text-lg font-display font-bold text-white leading-none">{item.onHand.toLocaleString()}</p>
+                       <p className="text-[9px] text-zinc-700 font-bold uppercase tracking-widest mt-1">Hub Alpha</p>
                     </td>
                     <td className="p-6 py-5 text-right">
-                       <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-[9px] font-bold tracking-widest uppercase
-                          ${item.status === 'In Stock' ? 'text-emerald-500 bg-emerald-500/10 border border-emerald-500/20' : ''}
-                          ${item.status === 'Low Stock' ? 'text-rose-500 bg-rose-500/10 border border-rose-500/20' : ''}
-                          ${item.status === 'Out of Stock' ? 'text-zinc-600 bg-zinc-900 border border-border-subtle' : ''}
-                          ${item.status === 'Expiring Soon' ? 'text-amber-500 bg-amber-500/10 border border-amber-500/20' : ''}
+                       <span className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-lg text-[9px] font-bold tracking-widest uppercase border transition-all
+                          ${item.status === 'In Stock' ? 'text-success bg-success/5 border-success/20' : ''}
+                          ${item.status === 'Low Stock' ? 'text-warning bg-warning/5 border-warning/20' : ''}
+                          ${item.status === 'Out of Stock' ? 'text-zinc-600 bg-zinc-950 border-white/5' : ''}
+                          ${item.status === 'Expiring Soon' ? 'text-brand bg-brand/5 border-brand/20' : ''}
                        `}>
-                          <div className={`w-1 h-1 rounded-full 
-                            ${item.status === 'In Stock' ? 'bg-emerald-500' : ''}
-                            ${item.status === 'Low Stock' ? 'bg-rose-500' : ''}
-                            ${item.status === 'Out of Stock' ? 'bg-zinc-700' : ''}
-                            ${item.status === 'Expiring Soon' ? 'bg-amber-500' : ''}
+                          <div className={`w-1.5 h-1.5 rounded-full 
+                            ${item.status === 'In Stock' ? 'bg-success animate-pulse' : ''}
+                            ${item.status === 'Low Stock' ? 'bg-warning' : ''}
+                            ${item.status === 'Out of Stock' ? 'bg-zinc-800' : ''}
+                            ${item.status === 'Expiring Soon' ? 'bg-brand shadow-[0_0_8px_rgba(99,102,241,0.5)]' : ''}
                           `} />
                           {item.status}
                        </span>
@@ -245,38 +248,40 @@ export default function InventoryView() {
             </table>
           </div>
         ) : (
-          <div className="p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
              {mockInventory.map(item => (
-                <div key={item.id} className="glass-panel p-6 rounded-2xl border-border-subtle hover:border-brand/40 transition-all group shadow-xl relative overflow-hidden">
-                   {/* Background Decorative element */}
-                   <div className="absolute -right-4 -top-4 w-24 h-24 bg-brand/5 rounded-full blur-2xl group-hover:bg-brand/10 transition-all duration-700" />
+                <div key={item.id} className="modern-card p-6 border-white/[0.03] hover:border-brand/40 transition-all group relative overflow-hidden flex flex-col h-full">
+                   <div className="absolute -right-4 -top-4 w-32 h-32 bg-brand/5 rounded-full blur-3xl group-hover:bg-brand/10 transition-all duration-1000" />
                    
-                   <div className="w-full aspect-square bg-zinc-900 border border-zinc-800/50 rounded-xl mb-6 flex items-center justify-center text-zinc-800 group-hover:scale-105 group-hover:text-brand/50 transition-all duration-500 relative z-10">
-                      <Package size={64} className="stroke-[1.5px]" />
+                   <div className="w-full aspect-[4/3] bg-zinc-950 border border-white/5 rounded-3xl mb-6 flex items-center justify-center text-zinc-900 group-hover:scale-[1.02] group-hover:text-brand/20 transition-all duration-700 relative z-10 overflow-hidden">
+                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white/[0.01] to-transparent opacity-50" />
+                      <Package size={80} className="stroke-[1px] relative z-10" />
                    </div>
                    
-                   <div className="relative z-10">
-                      <div className="flex items-start justify-between mb-4">
-                         <div className="flex-1 overflow-hidden">
-                            <h4 className="font-bold text-white tracking-tight leading-tight group-hover:text-brand transition-colors truncate">{item.name}</h4>
-                            <p className="text-[9px] text-zinc-500 font-bold uppercase tracking-[0.15em] mt-1">{item.sku}</p>
-                         </div>
-                         <button className="p-1.5 text-zinc-700 hover:text-white transition-colors shrink-0">
-                            <MoreVertical size={16} />
-                         </button>
+                   <div className="relative z-10 flex-1 flex flex-col justify-between">
+                      <div className="mb-8">
+                        <div className="flex items-start justify-between gap-4 mb-3">
+                           <h4 className="font-bold text-white tracking-tight leading-tight group-hover:text-brand transition-colors text-lg">{item.name}</h4>
+                           <button className="p-2 bg-zinc-950 border border-white/5 rounded-xl text-zinc-700 hover:text-white transition-all shadow-xl">
+                              <MoreVertical size={16} />
+                           </button>
+                        </div>
+                        <div className="flex items-center gap-3">
+                           <span className="text-[9px] px-2 py-0.5 bg-zinc-950 border border-white/5 text-zinc-600 rounded-md font-bold uppercase tracking-widest">{item.category}</span>
+                           <span className="text-[9px] text-zinc-700 font-bold uppercase tracking-widest">{item.sku}</span>
+                        </div>
                       </div>
 
-                      <div className="flex items-center justify-between pt-4 border-t border-zinc-800/50">
+                      <div className="flex items-end justify-between pt-6 border-t border-white/[0.03]">
                          <div>
-                            <p className="text-[8px] font-bold text-zinc-600 uppercase tracking-widest mb-0.5">Availability</p>
-                            <span className="text-2xl font-display font-bold text-white">{item.onHand.toLocaleString()}</span>
+                            <p className="text-[8px] font-bold text-zinc-700 uppercase tracking-widest mb-1.5">Availability Pool</p>
+                            <span className="text-3xl font-display font-bold text-white leading-none tracking-tight">{item.onHand.toLocaleString()}</span>
                          </div>
                          <div className="text-right">
-                            <span className={`text-[9px] font-bold px-2.5 py-1 rounded-md uppercase tracking-widest border
-                                ${item.status === 'In Stock' ? 'text-emerald-500 bg-emerald-500/5 border-emerald-500/20' : 'text-rose-500 bg-rose-500/5 border-rose-500/20'}`}>
+                            <span className={`text-[9px] font-bold px-3 py-1.5 rounded-lg uppercase tracking-widest border transition-all
+                                ${item.status === 'In Stock' ? 'text-success bg-success/5 border-success/20' : 'text-warning bg-warning/5 border-warning/20'}`}>
                               {item.status}
                             </span>
-                            <p className="text-[8px] text-zinc-600 font-bold uppercase tracking-tighter mt-2">Reorder: 12 days</p>
                          </div>
                       </div>
                    </div>
@@ -286,20 +291,24 @@ export default function InventoryView() {
         )}
 
         {/* Footer / Pagination */}
-        <div className="p-8 border-t border-border-subtle flex items-center justify-between">
-           <div className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
-              Showing <span className="text-white font-bold">1 to 4</span> of <span className="text-white font-bold">1,240</span> results
+        <div className="p-10 border-t border-white/[0.03] bg-white/[0.01] flex flex-col md:flex-row items-center justify-between gap-6">
+           <div className="text-[10px] font-bold text-zinc-700 uppercase tracking-[0.2em] px-4 py-2 bg-zinc-950 border border-white/5 rounded-2xl">
+              Telemetry: Showing <span className="text-white font-bold">1-4</span> of <span className="text-white font-bold">1,240</span> assets
            </div>
-           <div className="flex items-center gap-2">
-              <button className="p-2 border border-border-subtle rounded-lg text-zinc-600 hover:bg-zinc-800 disabled:opacity-30 transition-all" disabled><ChevronLeft size={16} /></button>
-              <div className="flex bg-zinc-900 p-0.5 rounded-lg border border-border-subtle">
+           <div className="flex items-center gap-4">
+              <button className="p-3 border border-white/5 rounded-2xl text-zinc-700 hover:bg-zinc-900 transition-all group" disabled>
+                 <ChevronLeft size={18} />
+              </button>
+              <div className="flex bg-zinc-950/50 p-1.5 rounded-2xl border border-white/5 backdrop-blur-sm shadow-xl">
                  {[1, 2, 3, '...', 124].map((p, i) => (
-                    <button key={i} className={`w-8 h-8 flex items-center justify-center rounded-md text-[10px] font-bold transition-all ${p === 1 ? 'bg-zinc-800 text-brand shadow-sm' : 'text-zinc-600 hover:text-white'}`}>
+                    <button key={i} className={`w-10 h-10 flex items-center justify-center rounded-xl text-[10px] font-bold transition-all ${p === 1 ? 'bg-zinc-900 text-brand shadow-2xl border border-white/5' : 'text-zinc-700 hover:text-white'}`}>
                        {p}
                     </button>
                  ))}
               </div>
-              <button className="p-2 border border-border-subtle rounded-lg text-zinc-600 hover:bg-zinc-800 transition-all hover:text-white"><ChevronRight size={16} /></button>
+              <button className="p-3 border border-white/5 rounded-2xl text-zinc-700 hover:bg-zinc-900 transition-all hover:text-white">
+                 <ChevronRight size={18} />
+              </button>
            </div>
         </div>
       </div>

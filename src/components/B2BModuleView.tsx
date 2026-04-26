@@ -214,10 +214,10 @@ export default function B2BModuleView() {
                        </div>
                        <div>
                           <p className="text-xs font-bold text-zinc-300 group-hover:text-white transition-colors uppercase tracking-tight">Test User Node</p>
-                          <p className="text-[10px] text-zinc-700 font-bold uppercase tracking-widest mt-1.5 flex items-center gap-2">
+                          <div className="text-[10px] text-zinc-700 font-bold uppercase tracking-widest mt-1.5 flex items-center gap-2">
                              <div className="w-1 h-1 rounded-full bg-zinc-800" />
                              Status Override Needed
-                          </p>
+                          </div>
                        </div>
                     </div>
                     <button className="text-zinc-800 hover:text-white transition-colors group/btn p-2 border border-transparent hover:border-white/5 hover:bg-zinc-900 rounded-xl">

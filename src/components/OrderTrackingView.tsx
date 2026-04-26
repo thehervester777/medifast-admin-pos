@@ -6,7 +6,7 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
 import { 
-  Plus, Search, Clock, Box, ExternalLink, MoreVertical, ChevronRight
+  Plus, Search, Clock, Box, ExternalLink, MoreVertical, ChevronRight, ClipboardList
 } from 'lucide-react';
 
 const mockOrders = [

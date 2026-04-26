@@ -78,10 +78,10 @@ export default function DashboardView() {
             MediFast <span className="text-brand">Command</span>
             <span className="px-2 py-0.5 rounded bg-brand/10 text-brand text-[9px] font-bold uppercase tracking-widest border border-brand/20">Operational Root</span>
           </h1>
-          <p className="text-zinc-600 font-bold uppercase tracking-widest text-[10px] mt-2 italic flex items-center gap-2">
+          <div className="text-zinc-600 font-bold uppercase tracking-widest text-[10px] mt-2 italic flex items-center gap-2">
             <div className="w-1.5 h-1.5 rounded-full bg-success shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
             Core Analytics • System Pulse: Nominal
-          </p>
+          </div>
         </div>
         <div className="flex gap-4">
            <button className="px-6 py-3 rounded-2xl bg-zinc-950 border border-white/5 text-zinc-500 font-bold text-[10px] uppercase tracking-widest hover:text-white hover:border-white/10 transition-all flex items-center gap-2">

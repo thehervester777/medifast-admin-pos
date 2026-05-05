@@ -33,30 +33,30 @@ export default function StatCard({ label, value, change, isPositive, icon: Icon,
       
       <div className="relative z-10">
         <div className="flex items-start justify-between mb-8">
-          <div className="w-12 h-12 rounded-[1.25rem] bg-zinc-950 border border-white/[0.05] flex items-center justify-center text-zinc-500 group-hover:text-white group-hover:bg-brand group-hover:border-transparent transition-all duration-500 group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-brand/20">
+          <div className="w-12 h-12 rounded-[1.25rem] bg-surface-base border border-border-subtle flex items-center justify-center text-text-muted group-hover:text-white group-hover:bg-brand group-hover:border-transparent transition-all duration-500 group-hover:scale-110 shadow-sm">
             <Icon size={20} />
           </div>
-          <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[10px] font-bold uppercase tracking-widest ${isPositive ? 'bg-success/10 text-success' : 'bg-danger/10 text-danger'} border border-white/[0.03]`}>
+          <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[10px] font-bold uppercase tracking-widest ${isPositive ? 'bg-success/10 text-success' : 'bg-danger/10 text-danger'} border border-border-subtle/50 shadow-sm`}>
             {isPositive ? <TrendingUp size={12} strokeWidth={3} /> : <TrendingDown size={12} strokeWidth={3} />}
             {change}
           </div>
         </div>
         
         <div className="space-y-1">
-          <h3 className="text-[10px] font-bold text-zinc-500 uppercase tracking-[0.2em]">{label}</h3>
+          <h3 className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em]">{label}</h3>
           <div className="flex items-baseline gap-2">
-            <span className="text-3xl font-display font-bold text-white tracking-tight group-hover:text-glow transition-all duration-500">{value}</span>
-            {subtitle && <span className="text-[10px] text-zinc-600 font-bold uppercase tracking-widest">{subtitle}</span>}
+            <span className="text-3xl font-display font-bold text-text-primary tracking-tight transition-all duration-500">{value}</span>
+            {subtitle && <span className="text-[10px] text-text-muted font-bold uppercase tracking-widest">{subtitle}</span>}
           </div>
         </div>
 
         {/* Progress bar refinement */}
         <div className="mt-8 space-y-2">
-          <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-zinc-600">
+          <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-text-muted">
             <span>Utilization</span>
             <span>{isPositive ? '82%' : '24%'}</span>
           </div>
-          <div className="h-1.5 w-full bg-zinc-950 rounded-full overflow-hidden border border-white/[0.02]">
+          <div className="h-1.5 w-full bg-surface-raised rounded-full overflow-hidden border border-border-subtle/20">
             <motion.div 
               initial={{ width: 0 }}
               animate={{ width: isPositive ? '82%' : '24%' }}

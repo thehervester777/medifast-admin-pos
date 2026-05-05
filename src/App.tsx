@@ -30,9 +30,14 @@ import {
   X,
   Handshake,
   Award,
-  Calendar
+  Calendar,
+  Wallet,
+  Activity,
+  Sun,
+  Moon
 } from 'lucide-react';
 import { Page } from './types.ts';
+import { useTheme } from './context/ThemeContext.tsx';
 
 // Import views
 import DashboardView from './components/DashboardView.tsx';
@@ -46,12 +51,14 @@ import B2BModuleView from './components/B2BModuleView.tsx';
 import ReferralView from './components/ReferralView.tsx';
 import SummaryView from './components/SummaryView.tsx';
 import AdminManagementView from './components/AdminManagementView.tsx';
+import ManagementSystemView from './components/ManagementSystemView.tsx';
 
 import CommandPalette from './components/CommandPalette.tsx';
 
 import LoginPage from './components/LoginPage.tsx';
 
 export default function App() {
+  const { theme, toggleTheme } = useTheme();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentPage, setCurrentPage] = useState<Page>('dashboard');
   const [selectedRange, setSelectedRange] = useState('Today');
@@ -93,25 +100,30 @@ export default function App() {
 
   const navItems = [
     { id: 'dashboard' as Page, label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'orders' as Page, label: 'Order Reports', icon: ClipboardList, hasChildren: true },
+    { id: 'orders' as Page, label: 'Orders', icon: ClipboardList, hasChildren: true },
     { id: 'inventory' as Page, label: 'Inventory', icon: Package, hasChildren: true, children: [
       { id: 'summary' as Page, label: 'Summary' },
-      { id: 'inventory' as Page, label: 'Detailed View' }
+      { id: 'inventory' as Page, label: 'Products' }
     ]},
-    { id: 'clients' as Page, label: 'Users', icon: Users, hasChildren: true, children: [
-      { id: 'admins' as Page, label: 'Admin' },
-      { id: 'clients' as Page, label: 'Users' }
+    { id: 'clients' as Page, label: 'Customers', icon: Users, hasChildren: true, children: [
+      { id: 'admins' as Page, label: 'Team' },
+      { id: 'clients' as Page, label: 'Customer List' }
     ]},
-    { id: 'products' as Page, label: 'Our Products', icon: Box, hasChildren: true },
+    { id: 'products' as Page, label: 'Products', icon: Box, hasChildren: true },
     { id: 'discounts' as Page, label: 'Discounts', icon: Tags, hasChildren: true },
-    { id: 'logistics' as Page, label: 'Logistics', icon: Truck, hasChildren: true },
-    { id: 'analytics' as Page, label: 'Analytics', icon: BarChart3, hasChildren: true },
-    { id: 'b2b' as Page, label: 'B2B Module', icon: Handshake, hasChildren: true },
-    { id: 'referral' as Page, label: 'Referral Module', icon: Award, hasChildren: true, children: [
-      { id: 'referral' as Page, label: 'Dashboard' },
-      { id: 'referral_generate' as Page, label: 'Generate Code' },
+    { id: 'logistics' as Page, label: 'Shipping', icon: Truck, hasChildren: true },
+    { id: 'analytics' as Page, label: 'Reports', icon: BarChart3, hasChildren: true },
+    { id: 'management' as Page, label: 'Management', icon: Wallet, hasChildren: true, children: [
+      { id: 'management' as Page, label: 'Financials' },
+      { id: 'analytics' as Page, label: 'Performance' },
+      { id: 'admins' as Page, label: 'Team Admin' }
+    ]},
+    { id: 'b2b' as Page, label: 'Stores', icon: Handshake, hasChildren: true },
+    { id: 'referral' as Page, label: 'Referrals', icon: Award, hasChildren: true, children: [
+      { id: 'referral' as Page, label: 'Overview' },
+      { id: 'referral_generate' as Page, label: 'Create Code' },
       { id: 'referral_manage' as Page, label: 'Manage Codes' },
-      { id: 'referral_customers' as Page, label: 'Customer List' }
+      { id: 'referral_customers' as Page, label: 'Customers' }
     ]},
   ];
 
@@ -143,7 +155,7 @@ export default function App() {
         }}
         className="fixed lg:sticky top-0 h-screen z-50 p-4 shrink-0 pointer-events-none"
       >
-        <div className="h-full glass-panel rounded-[2.5rem] flex flex-col pointer-events-auto border-white/[0.03] shadow-2xl relative overflow-hidden">
+        <div className="h-full glass-panel rounded-[2.5rem] flex flex-col pointer-events-auto border-border-subtle shadow-2xl relative overflow-hidden">
           {/* Logo Section */}
           <div className="px-6 py-8 h-20 flex items-center gap-3 overflow-hidden">
             <div className="w-10 h-10 bg-brand rounded-2xl flex items-center justify-center text-white shadow-xl shadow-brand/20 shrink-0">
@@ -155,7 +167,7 @@ export default function App() {
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -10 }}
-                  className="font-display font-bold text-xl text-white tracking-tight whitespace-nowrap"
+                  className="font-display font-bold text-xl text-text-primary tracking-tight whitespace-nowrap"
                 >
                   Medi<span className="text-brand relative">fast<span className="absolute -top-1 -right-4 text-[7px] bg-brand/20 text-brand px-1 rounded-sm border border-brand/30 leading-none py-0.5 font-sans">PRO</span></span>
                 </motion.span>
@@ -176,8 +188,8 @@ export default function App() {
                   }}
                   className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all relative group overflow-hidden
                     ${currentPage === item.id 
-                      ? 'text-white' 
-                      : 'text-zinc-500 hover:text-white hover:bg-white/5'
+                      ? 'text-text-primary' 
+                      : 'text-text-muted hover:text-text-primary hover:bg-text-primary/5'
                     }`}
                 >
                   {currentPage === item.id && (
@@ -186,7 +198,7 @@ export default function App() {
                       className="absolute inset-0 bg-brand/10 border border-brand/20 rounded-2xl -z-10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]"
                     />
                   )}
-                  <item.icon size={20} className={`relative z-10 transition-colors ${currentPage === item.id ? 'text-brand' : 'group-hover:text-white'}`} strokeWidth={currentPage === item.id ? 2.5 : 2} />
+                  <item.icon size={20} className={`relative z-10 transition-colors ${currentPage === item.id ? 'text-brand' : 'group-hover:text-text-primary'}`} strokeWidth={currentPage === item.id ? 2.5 : 2} />
                   <AnimatePresence mode="popLayout">
                     {isSidebarOpen && (
                       <motion.div 
@@ -195,13 +207,13 @@ export default function App() {
                         exit={{ opacity: 0, x: -10 }}
                         className="flex-1 flex items-center justify-between relative z-10 overflow-hidden"
                       >
-                        <span className={`text-[11px] font-bold uppercase tracking-widest whitespace-nowrap transition-colors ${currentPage === item.id ? 'text-white' : 'text-zinc-600 group-hover:text-zinc-300'}`}>
+                        <span className={`text-[11px] font-bold uppercase tracking-widest whitespace-nowrap transition-colors ${currentPage === item.id ? 'text-text-primary' : 'text-text-muted group-hover:text-text-secondary'}`}>
                           {item.label}
                         </span>
                         {item.hasChildren && (
                           <ChevronRight 
                             size={14} 
-                            className={`transition-transform duration-300 ${expandedItems[item.id] ? 'rotate-90' : ''} ${currentPage === item.id ? 'text-brand' : 'text-zinc-800 group-hover:text-zinc-600'}`}
+                            className={`transition-transform duration-300 ${expandedItems[item.id] ? 'rotate-90' : ''} ${currentPage === item.id ? 'text-brand' : 'text-border-subtle group-hover:text-text-muted'}`}
                           />
                         )}
                       </motion.div>
@@ -225,9 +237,9 @@ export default function App() {
                               setCurrentPage(sub.id);
                               if (windowWidth <= 1024) setIsSidebarOpen(false);
                             }}
-                            className={`w-full text-left py-2 px-3 text-[11px] font-bold uppercase tracking-widest transition-colors flex items-center gap-3 ${currentPage === sub.id ? 'text-white' : 'text-zinc-600 hover:text-white'}`}
+                            className={`w-full text-left py-2 px-3 text-[11px] font-bold uppercase tracking-widest transition-colors flex items-center gap-3 ${currentPage === sub.id ? 'text-text-primary' : 'text-text-muted hover:text-text-primary'}`}
                           >
-                            <div className={`w-1.5 h-1.5 rounded-full border ${currentPage === sub.id ? 'bg-brand border-brand' : 'border-zinc-700'}`} />
+                            <div className={`w-1.5 h-1.5 rounded-full border ${currentPage === sub.id ? 'bg-brand border-brand' : 'border-border-subtle'}`} />
                             {sub.label}
                           </button>
                         ))}
@@ -239,27 +251,27 @@ export default function App() {
             ))}
             
             <div className="py-4">
-              <div className="h-[1px] bg-white/[0.03] mx-4 mb-4" />
+              <div className="h-[1px] bg-border-subtle mx-4 mb-4" />
               <button
                 onClick={() => setCurrentPage('settings')}
                 className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all relative group
                   ${currentPage === 'settings' 
-                    ? 'text-white' 
-                    : 'text-zinc-500 hover:text-white hover:bg-white/5'
+                    ? 'text-text-primary' 
+                    : 'text-text-muted hover:text-text-primary hover:bg-text-primary/5'
                   }`}
               >
                 {currentPage === 'settings' && (
-                  <motion.div layoutId="active-nav" className="absolute inset-0 bg-white/5 border border-white/5 rounded-2xl" />
+                  <motion.div layoutId="active-nav" className="absolute inset-0 bg-text-primary/5 border border-border-subtle rounded-2xl" />
                 )}
-                <Settings size={20} className={`relative z-10 ${currentPage === 'settings' ? 'text-brand' : 'group-hover:text-white'}`} />
+                <Settings size={20} className={`relative z-10 ${currentPage === 'settings' ? 'text-brand' : 'group-hover:text-text-primary'}`} />
                 {isSidebarOpen && <span className="text-sm font-semibold relative z-10 tracking-tight">Settings</span>}
               </button>
             </div>
           </nav>
 
           {/* User Account & Branding */}
-          <div className="p-4 mt-auto border-t border-white/[0.03] space-y-4">
-            <button className="w-full flex items-center gap-4 p-2.5 rounded-3xl group hover:bg-white/5 transition-colors text-left overflow-hidden">
+          <div className="p-4 mt-auto border-t border-border-subtle space-y-4">
+            <button className="w-full flex items-center gap-4 p-2.5 rounded-3xl group hover:bg-text-primary/5 transition-colors text-left overflow-hidden">
               <div className="relative shrink-0">
                  <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=admin&backgroundColor=121214" alt="User" className="w-10 h-10 rounded-2xl shrink-0" />
                  <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-surface-raised rounded-full" />
@@ -272,9 +284,9 @@ export default function App() {
                     exit={{ opacity: 0, x: -10 }}
                     className="flex-1 min-w-0"
                   >
-                    <p className="text-xs font-bold text-white truncate text-ellipsis">Rishu Admin</p>
+                    <p className="text-xs font-bold text-text-primary truncate text-ellipsis">Rishu Admin</p>
                     <div className="flex items-center gap-1.5 mt-0.5">
-                       <span className="text-[9px] text-zinc-600 font-bold uppercase tracking-tight truncate text-ellipsis">Superuser</span>
+                       <span className="text-[9px] text-text-muted font-bold uppercase tracking-tight truncate text-ellipsis">Superuser</span>
                        <div className="w-1 h-1 rounded-full bg-brand" />
                     </div>
                   </motion.div>
@@ -288,10 +300,10 @@ export default function App() {
                 animate={{ opacity: 1 }}
                 className="px-4"
               >
-                <div className="flex items-center gap-3 text-[9px] font-bold text-zinc-700 uppercase tracking-[0.3em]">
-                  <div className="h-[1px] flex-1 bg-white/[0.03]" />
-                  <span className="whitespace-nowrap hover:text-white transition-colors cursor-default">Anon Studios</span>
-                  <div className="h-[1px] flex-1 bg-white/[0.03]" />
+                <div className="flex items-center gap-3 text-[9px] font-bold text-text-muted uppercase tracking-[0.3em]">
+                  <div className="h-[1px] flex-1 bg-border-subtle" />
+                  <span className="whitespace-nowrap hover:text-text-primary transition-colors cursor-default">Anon Studios</span>
+                  <div className="h-[1px] flex-1 bg-border-subtle" />
                 </div>
               </motion.div>
             )}
@@ -302,11 +314,11 @@ export default function App() {
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col relative min-w-0 transition-all duration-500">
         {/* Modern Header */}
-        <header className="h-24 px-8 flex items-center justify-between sticky top-0 z-40 bg-surface-base/80 backdrop-blur-xl border-b border-white/[0.03]">
+        <header className="h-24 px-8 flex items-center justify-between sticky top-0 z-40 bg-surface-base/80 backdrop-blur-xl border-b border-border-subtle">
           <div className="flex items-center gap-6 max-w-2xl flex-1">
             <button 
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className="p-3 rounded-2xl hover:bg-white/5 text-zinc-500 transition-colors"
+              className="p-3 rounded-2xl hover:bg-text-primary/5 text-text-muted transition-colors"
             >
               {isSidebarOpen && windowWidth <= 1024 ? <X size={20} /> : <Menu size={20} />}
             </button>
@@ -315,26 +327,27 @@ export default function App() {
               onClick={() => setIsSearchOpen(true)}
               className="relative flex-1 max-w-md group cursor-pointer"
             >
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-600 group-hover:text-brand transition-colors" size={16} />
-              <div className="w-full pl-12 pr-4 py-3 bg-white/[0.02] border border-white/[0.05] group-hover:border-white/10 rounded-[1.25rem] text-sm text-zinc-500 flex items-center justify-between transition-all">
-                <span>Enterprise Search...</span>
-                <div className="hidden sm:flex items-center gap-1.5 px-2 py-1 rounded-lg bg-zinc-950 text-[10px] font-bold text-zinc-500 border border-white/5">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted group-hover:text-brand transition-colors" size={16} />
+              <div className="w-full pl-12 pr-4 py-3 bg-text-primary/5 border border-border-subtle group-hover:border-brand/40 rounded-[1.25rem] text-sm text-text-muted flex items-center justify-between transition-all shadow-sm">
+                <span>Search anything...</span>
+                <div className="hidden sm:flex items-center gap-1.5 px-2 py-1 rounded-lg bg-surface-base text-[10px] font-bold text-text-muted border border-border-subtle shadow-sm">
                   <span className="text-[12px] leading-none">⌘</span>K
                 </div>
               </div>
             </div>
           </div>
 
+
           <div className="flex items-center gap-6">
-            <div className="hidden lg:flex items-center gap-1.5 p-1.5 bg-zinc-950/50 border border-white/[0.03] rounded-[1.25rem]">
+            <div className="hidden lg:flex items-center gap-1.5 p-1.5 bg-surface-panel/50 border border-border-subtle rounded-[1.25rem]">
               {['Today', '7D', 'Custom'].map((t) => (
                 <button 
                   key={t}
                   onClick={() => setSelectedRange(t)}
                   className={`px-5 py-2 text-[10px] font-bold rounded-xl transition-all uppercase tracking-widest
                     ${selectedRange === t 
-                      ? 'bg-white text-black shadow-lg shadow-white/10' 
-                      : 'text-zinc-500 hover:text-white'
+                      ? 'bg-text-primary text-surface-base shadow-lg shadow-text-primary/10' 
+                      : 'text-text-muted hover:text-text-primary'
                     }`}
                 >
                   {t === 'Custom' ? <Calendar size={14} className="inline mr-2 -mt-0.5" /> : null}
@@ -343,24 +356,36 @@ export default function App() {
               ))}
             </div>
             
-            <div className="h-8 w-[1px] bg-white/[0.05]" />
+            <div className="h-8 w-[1px] bg-border-subtle" />
             
             <div className="flex items-center gap-3">
-              <button className="relative p-3 bg-white/[0.02] hover:bg-white/[0.05] rounded-[1.25rem] border border-white/[0.05] transition-all group">
-                <Bell size={20} className="text-zinc-400 group-hover:text-white" />
+              <button 
+                onClick={toggleTheme}
+                className="p-3 bg-text-primary/5 hover:bg-text-primary/10 rounded-[1.25rem] border border-border-subtle transition-all group"
+                title={theme === 'light' ? 'Switch to Night Mode' : 'Switch to Light Mode'}
+              >
+                {theme === 'light' ? (
+                  <Moon size={20} className="text-text-secondary group-hover:text-text-primary" />
+                ) : (
+                  <Sun size={20} className="text-text-secondary group-hover:text-text-primary" />
+                )}
+              </button>
+
+              <button className="relative p-3 bg-text-primary/5 hover:bg-text-primary/10 rounded-[1.25rem] border border-border-subtle transition-all group">
+                <Bell size={20} className="text-text-secondary group-hover:text-text-primary" />
                 <span className="absolute top-3.5 right-3.5 w-2 h-2 bg-brand rounded-full ring-4 ring-surface-base" />
               </button>
               
               <button className="btn-primary group">
                 <Plus size={18} className="inline mr-2 -mt-0.5" />
-                Capture POD
+                Quick Action
               </button>
             </div>
           </div>
         </header>
 
         {/* Dynamic Content Port */}
-        <div className="flex-1 overflow-y-auto custom-scrollbar px-8 py-8">
+        <div className="flex-1 overflow-y-auto scroll-smooth custom-scrollbar px-8 py-8 will-change-scroll">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentPage}
@@ -380,12 +405,13 @@ export default function App() {
               {currentPage === 'admins' && <AdminManagementView />}
               {currentPage === 'b2b' && <B2BModuleView />}
               {currentPage === 'referral' && <ReferralView />}
+              {currentPage === 'management' && <ManagementSystemView />}
               {currentPage === 'settings' && <SettingsView />}
               {['products', 'discounts'].includes(currentPage) && (
-                <div className="modern-card p-12 text-center">
-                  <Package size={48} className="mx-auto text-zinc-800 mb-6" />
-                  <h2 className="text-2xl font-display font-bold text-white mb-2">Module Under Construction</h2>
-                  <p className="text-zinc-500 font-medium">The {currentPage} management interface is currently being optimized.</p>
+                <div className="modern-card p-12 text-center border-border-subtle shadow-sm bg-surface-panel/30">
+                  <Package size={48} className="mx-auto text-text-muted/60 mb-6" />
+                  <h2 className="text-2xl font-display font-bold text-text-primary mb-2">Module Under Construction</h2>
+                  <p className="text-text-muted font-medium">The {currentPage} management interface is currently being optimized.</p>
                 </div>
               )}
             </motion.div>

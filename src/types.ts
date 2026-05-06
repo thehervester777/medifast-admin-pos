@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export type Page = 'dashboard' | 'inventory' | 'orders' | 'clients' | 'logistics' | 'analytics' | 'settings' | 'b2b' | 'referral' | 'products' | 'discounts' | 'summary' | 'reports' | 'admins' | 'management';
+export type Page = 'dashboard' | 'inventory' | 'orders' | 'clients' | 'logistics' | 'analytics' | 'settings' | 'b2b' | 'referral' | 'products' | 'discounts' | 'summary' | 'reports' | 'admins' | 'management' | 'brands' | 'support' | 'notice' | 'api' | 'order_pending' | 'order_accepted' | 'order_process' | 'order_picked' | 'order_rescheduled' | 'order_delivered' | 'order_cancelled' | 'order_returned' | 'order_due' | 'order_cancel_request';
 
 export interface StatItem {
   id: string;

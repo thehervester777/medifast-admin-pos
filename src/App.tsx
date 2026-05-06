@@ -34,7 +34,10 @@ import {
   Wallet,
   Activity,
   Sun,
-  Moon
+  Moon,
+  MessageSquare,
+  Megaphone,
+  Code
 } from 'lucide-react';
 import { Page } from './types.ts';
 import { useTheme } from './context/ThemeContext.tsx';
@@ -52,6 +55,14 @@ import ReferralView from './components/ReferralView.tsx';
 import SummaryView from './components/SummaryView.tsx';
 import AdminManagementView from './components/AdminManagementView.tsx';
 import ManagementSystemView from './components/ManagementSystemView.tsx';
+import ProductsView from './components/ProductsView.tsx';
+import BrandsView from './components/BrandsView.tsx';
+import OrderReportsView from './components/OrderReportsView.tsx';
+import SupportChatView from './components/SupportChatView.tsx';
+import AppNoticeView from './components/AppNoticeView.tsx';
+import ApiManagementView from './components/ApiManagementView.tsx';
+
+import MedifastLogo from './components/MedifastLogo.tsx';
 
 import CommandPalette from './components/CommandPalette.tsx';
 
@@ -100,7 +111,18 @@ export default function App() {
 
   const navItems = [
     { id: 'dashboard' as Page, label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'orders' as Page, label: 'Orders', icon: ClipboardList, hasChildren: true },
+    { id: 'order_pending' as Page, label: 'Order Reports', icon: ClipboardList, hasChildren: true, children: [
+      { id: 'order_pending' as Page, label: 'Pending (123)' },
+      { id: 'order_accepted' as Page, label: 'Accepted (0)' },
+      { id: 'order_process' as Page, label: 'In Process (0)' },
+      { id: 'order_picked' as Page, label: 'Picked Up (0)' },
+      { id: 'order_rescheduled' as Page, label: 'Rescheduled (0)' },
+      { id: 'order_delivered' as Page, label: 'Delivered (15)' },
+      { id: 'order_cancelled' as Page, label: 'Cancelled (247)' },
+      { id: 'order_returned' as Page, label: 'Returned (2735)' },
+      { id: 'order_due' as Page, label: 'Due (25)' },
+      { id: 'order_cancel_request' as Page, label: 'Cancel Request' }
+    ]},
     { id: 'inventory' as Page, label: 'Inventory', icon: Package, hasChildren: true, children: [
       { id: 'summary' as Page, label: 'Summary' },
       { id: 'inventory' as Page, label: 'Products' }
@@ -109,7 +131,13 @@ export default function App() {
       { id: 'admins' as Page, label: 'Team' },
       { id: 'clients' as Page, label: 'Customer List' }
     ]},
-    { id: 'products' as Page, label: 'Products', icon: Box, hasChildren: true },
+    { id: 'products' as Page, label: 'Our Products', icon: Box, hasChildren: true, children: [
+      { id: 'products' as Page, label: 'Product' },
+      { id: 'inventory' as Page, label: 'Category' },
+      { id: 'inventory' as Page, label: 'Subcategory' },
+      { id: 'inventory' as Page, label: 'Child Category' },
+      { id: 'brands' as Page, label: 'Brand' }
+    ]},
     { id: 'discounts' as Page, label: 'Discounts', icon: Tags, hasChildren: true },
     { id: 'logistics' as Page, label: 'Shipping', icon: Truck, hasChildren: true },
     { id: 'analytics' as Page, label: 'Reports', icon: BarChart3, hasChildren: true },
@@ -125,6 +153,9 @@ export default function App() {
       { id: 'referral_manage' as Page, label: 'Manage Codes' },
       { id: 'referral_customers' as Page, label: 'Customers' }
     ]},
+    { id: 'support' as Page, label: 'Support Chat', icon: MessageSquare },
+    { id: 'notice' as Page, label: 'App Notice', icon: Megaphone },
+    { id: 'api' as Page, label: 'API Option', icon: Code },
   ];
 
   if (!isAuthenticated) {
@@ -150,23 +181,37 @@ export default function App() {
       <motion.aside 
         initial={false}
         animate={{ 
-          width: isSidebarOpen ? (windowWidth <= 1024 ? 280 : 260) : (windowWidth <= 1024 ? 0 : 88),
-          x: isSidebarOpen || windowWidth > 1024 ? 0 : -300
+          width: isSidebarOpen ? (windowWidth <= 1024 ? 300 : 280) : (windowWidth <= 1024 ? 0 : 88),
+          x: isSidebarOpen || windowWidth > 1024 ? 0 : -320
+        }}
+        transition={{ 
+          type: 'spring',
+          stiffness: 260,
+          damping: 25,
+          mass: 0.8
         }}
         className="fixed lg:sticky top-0 h-screen z-50 p-4 shrink-0 pointer-events-none"
       >
-        <div className="h-full glass-panel rounded-[2.5rem] flex flex-col pointer-events-auto border-border-subtle shadow-2xl relative overflow-hidden">
-          {/* Logo Section */}
-          <div className="px-6 py-8 h-20 flex items-center gap-3 overflow-hidden">
-            <div className="w-10 h-10 bg-brand rounded-2xl flex items-center justify-center text-white shadow-xl shadow-brand/20 shrink-0">
-              <Package size={22} />
+        <div className="h-full w-full glass-panel rounded-[2.5rem] flex flex-col pointer-events-auto border-border-subtle shadow-2xl relative overflow-hidden group/sidebar transition-shadow duration-500 hover:shadow-brand/10">
+          {/* Animated Floating Border Glow */}
+          <div className="absolute -inset-[2px] opacity-0 group-hover/sidebar:opacity-100 transition-opacity duration-700 pointer-events-none">
+            <div className="absolute inset-0 bg-[conic-gradient(from_0deg,transparent_0%,var(--brand)_15%,var(--brand)_25%,transparent_50%,var(--brand)_65%,var(--brand)_75%,transparent_100%)] animate-[spin_4s_linear_infinite] opacity-40 blur-xl" />
+          </div>
+          
+          <div className="relative h-full w-full flex flex-col z-10 bg-surface-base/80 backdrop-blur-xl">
+            {/* Logo Section */}
+            <div className={`py-12 h-24 flex items-center gap-4 overflow-hidden shrink-0 transition-all duration-500
+              ${isSidebarOpen ? 'px-8 justify-start' : 'px-0 justify-center'}`}>
+            <div className="w-12 h-12 flex items-center justify-center shrink-0">
+              <MedifastLogo />
             </div>
-            <AnimatePresence>
+            <AnimatePresence mode="popLayout">
               {isSidebarOpen && (
                 <motion.span 
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -10 }}
+                  initial={{ opacity: 0, x: -10, filter: 'blur(8px)' }}
+                  animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
+                  exit={{ opacity: 0, x: -10, filter: 'blur(8px)' }}
+                  transition={{ duration: 0.4 }}
                   className="font-display font-bold text-xl text-text-primary tracking-tight whitespace-nowrap"
                 >
                   Medi<span className="text-brand relative">fast<span className="absolute -top-1 -right-4 text-[7px] bg-brand/20 text-brand px-1 rounded-sm border border-brand/30 leading-none py-0.5 font-sans">PRO</span></span>
@@ -175,7 +220,7 @@ export default function App() {
             </AnimatePresence>
           </div>
 
-          <nav className="flex-1 px-4 space-y-2 py-4 overflow-y-auto custom-scrollbar">
+          <nav className="flex-1 space-y-2 py-4 overflow-y-auto overflow-x-hidden custom-scrollbar">
             {navItems.map((item) => (
               <div key={item.id} className="space-y-1">
                 <button
@@ -187,6 +232,7 @@ export default function App() {
                     }
                   }}
                   className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all relative group overflow-hidden
+                    ${isSidebarOpen ? 'justify-start px-6' : 'justify-center px-0'}
                     ${currentPage === item.id 
                       ? 'text-text-primary' 
                       : 'text-text-muted hover:text-text-primary hover:bg-text-primary/5'
@@ -198,13 +244,13 @@ export default function App() {
                       className="absolute inset-0 bg-brand/10 border border-brand/20 rounded-2xl -z-10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]"
                     />
                   )}
-                  <item.icon size={20} className={`relative z-10 transition-colors ${currentPage === item.id ? 'text-brand' : 'group-hover:text-text-primary'}`} strokeWidth={currentPage === item.id ? 2.5 : 2} />
+                  <item.icon size={20} className={`relative z-10 transition-colors shrink-0 ${currentPage === item.id ? 'text-brand' : 'group-hover:text-text-primary'}`} strokeWidth={currentPage === item.id ? 3 : 2} />
                   <AnimatePresence mode="popLayout">
                     {isSidebarOpen && (
                       <motion.div 
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -10 }}
+                        initial={{ opacity: 0, x: -10, width: 0 }}
+                        animate={{ opacity: 1, x: 0, width: "auto" }}
+                        exit={{ opacity: 0, x: -10, width: 0 }}
                         className="flex-1 flex items-center justify-between relative z-10 overflow-hidden"
                       >
                         <span className={`text-[11px] font-bold uppercase tracking-widest whitespace-nowrap transition-colors ${currentPage === item.id ? 'text-text-primary' : 'text-text-muted group-hover:text-text-secondary'}`}>
@@ -213,7 +259,7 @@ export default function App() {
                         {item.hasChildren && (
                           <ChevronRight 
                             size={14} 
-                            className={`transition-transform duration-300 ${expandedItems[item.id] ? 'rotate-90' : ''} ${currentPage === item.id ? 'text-brand' : 'text-border-subtle group-hover:text-text-muted'}`}
+                            className={`transition-transform duration-300 shrink-0 ${expandedItems[item.id] ? 'rotate-90' : ''} ${currentPage === item.id ? 'text-brand' : 'text-border-subtle group-hover:text-text-muted'}`}
                           />
                         )}
                       </motion.div>
@@ -250,28 +296,49 @@ export default function App() {
               </div>
             ))}
             
-            <div className="py-4">
-              <div className="h-[1px] bg-border-subtle mx-4 mb-4" />
+            <div className="py-2">
+              <div className="h-[1px] bg-border-subtle/30 mx-6 mb-2" />
               <button
-                onClick={() => setCurrentPage('settings')}
-                className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all relative group
+                onClick={() => {
+                  setCurrentPage('settings');
+                  if (windowWidth <= 1024) setIsSidebarOpen(false);
+                }}
+                className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all relative group overflow-hidden
+                  ${isSidebarOpen ? 'justify-start px-6' : 'justify-center px-0'}
                   ${currentPage === 'settings' 
                     ? 'text-text-primary' 
                     : 'text-text-muted hover:text-text-primary hover:bg-text-primary/5'
                   }`}
               >
                 {currentPage === 'settings' && (
-                  <motion.div layoutId="active-nav" className="absolute inset-0 bg-text-primary/5 border border-border-subtle rounded-2xl" />
+                  <motion.div 
+                    layoutId="active-pill"
+                    className="absolute inset-0 bg-brand/10 border border-brand/20 rounded-2xl -z-10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]"
+                  />
                 )}
-                <Settings size={20} className={`relative z-10 ${currentPage === 'settings' ? 'text-brand' : 'group-hover:text-text-primary'}`} />
-                {isSidebarOpen && <span className="text-sm font-semibold relative z-10 tracking-tight">Settings</span>}
+                <Settings size={20} className={`relative z-10 transition-colors shrink-0 ${currentPage === 'settings' ? 'text-brand' : 'group-hover:text-text-primary'}`} strokeWidth={currentPage === 'settings' ? 3 : 2} />
+                <AnimatePresence mode="popLayout">
+                  {isSidebarOpen && (
+                    <motion.div 
+                      initial={{ opacity: 0, x: -10, width: 0 }}
+                      animate={{ opacity: 1, x: 0, width: "auto" }}
+                      exit={{ opacity: 0, x: -10, width: 0 }}
+                      className="flex-1 flex items-center relative z-10 overflow-hidden"
+                    >
+                      <span className={`text-[11px] font-bold uppercase tracking-widest whitespace-nowrap transition-colors ${currentPage === 'settings' ? 'text-text-primary' : 'text-text-muted group-hover:text-text-secondary'}`}>
+                        Settings
+                      </span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </button>
             </div>
           </nav>
 
           {/* User Account & Branding */}
           <div className="p-4 mt-auto border-t border-border-subtle space-y-4">
-            <button className="w-full flex items-center gap-4 p-2.5 rounded-3xl group hover:bg-text-primary/5 transition-colors text-left overflow-hidden">
+            <button className={`w-full flex items-center gap-4 p-2.5 rounded-3xl group hover:bg-text-primary/5 transition-all text-left overflow-hidden
+              ${isSidebarOpen ? 'justify-start px-4' : 'justify-center px-0'}`}>
               <div className="relative shrink-0">
                  <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=admin&backgroundColor=121214" alt="User" className="w-10 h-10 rounded-2xl shrink-0" />
                  <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-surface-raised rounded-full" />
@@ -308,11 +375,12 @@ export default function App() {
               </motion.div>
             )}
           </div>
+          </div>
         </div>
       </motion.aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 flex flex-col relative min-w-0 transition-all duration-500">
+      <main className="flex-1 flex flex-col relative min-w-0" style={{ transition: 'all 0.7s cubic-bezier(0.4, 0, 0.2, 1)' }}>
         {/* Modern Header */}
         <header className="h-24 px-8 flex items-center justify-between sticky top-0 z-40 bg-surface-base/80 backdrop-blur-xl border-b border-border-subtle">
           <div className="flex items-center gap-6 max-w-2xl flex-1">
@@ -396,6 +464,16 @@ export default function App() {
               className="max-w-7xl mx-auto pb-12"
             >
               {currentPage === 'dashboard' && <DashboardView />}
+              {currentPage === 'order_pending' && <OrderReportsView activeStatus="Pending" />}
+              {currentPage === 'order_accepted' && <OrderReportsView activeStatus="Accepted" />}
+              {currentPage === 'order_process' && <OrderReportsView activeStatus="In Process" />}
+              {currentPage === 'order_picked' && <OrderReportsView activeStatus="Picked Up" />}
+              {currentPage === 'order_rescheduled' && <OrderReportsView activeStatus="Rescheduled" />}
+              {currentPage === 'order_delivered' && <OrderReportsView activeStatus="Delivered" />}
+              {currentPage === 'order_cancelled' && <OrderReportsView activeStatus="Cancelled" />}
+              {currentPage === 'order_returned' && <OrderReportsView activeStatus="Returned" />}
+              {currentPage === 'order_due' && <OrderReportsView activeStatus="Due" />}
+              {currentPage === 'order_cancel_request' && <OrderReportsView activeStatus="Cancel Request" />}
               {currentPage === 'inventory' && <InventoryView />}
               {currentPage === 'orders' && <OrderTrackingView />}
               {currentPage === 'summary' && <SummaryView />}
@@ -404,10 +482,15 @@ export default function App() {
               {currentPage === 'clients' && <ClientManagementView />}
               {currentPage === 'admins' && <AdminManagementView />}
               {currentPage === 'b2b' && <B2BModuleView />}
+              {currentPage === 'products' && <ProductsView />}
+              {currentPage === 'brands' && <BrandsView />}
+              {currentPage === 'support' && <SupportChatView />}
+              {currentPage === 'notice' && <AppNoticeView />}
+              {currentPage === 'api' && <ApiManagementView />}
               {currentPage === 'referral' && <ReferralView />}
               {currentPage === 'management' && <ManagementSystemView />}
               {currentPage === 'settings' && <SettingsView />}
-              {['products', 'discounts'].includes(currentPage) && (
+              {['discounts'].includes(currentPage) && (
                 <div className="modern-card p-12 text-center border-border-subtle shadow-sm bg-surface-panel/30">
                   <Package size={48} className="mx-auto text-text-muted/60 mb-6" />
                   <h2 className="text-2xl font-display font-bold text-text-primary mb-2">Module Under Construction</h2>

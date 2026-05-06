@@ -435,7 +435,7 @@ export default function ManagementSystemView() {
               <h3 className="text-lg font-display font-bold text-text-primary tracking-tight">Transaction Log</h3>
               <FileText size={16} className="text-text-muted/30" />
             </div>
-            <div className="p-8 space-y-8 flex-1">
+            <div className="p-8 space-y-8 flex-1 overflow-x-hidden">
               <AnimatePresence initial={false}>
                 {transactions.map((tx) => (
                   <motion.div 
